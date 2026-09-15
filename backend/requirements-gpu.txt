@@ -1,0 +1,45 @@
+# GPU-enabled requirements file for the LSTM Next Word Predictor backend.
+#
+# This file is for users who want to train and run inference on an NVIDIA
+# GPU. It does NOT pin torch — instead it gives you three separate `pip
+# install` commands to choose from, because the right CUDA build depends
+# on your GPU driver and OS. See https://pytorch.org/get-started/locally/
+# for the canonical selector.
+#
+# ---- Step 1: install the matching PyTorch CUDA wheel -------------------
+#
+# Pick ONE of the three lines below and run it FIRST. Then continue with
+# step 2. Do not use the plain `pip install torch` from PyPI — that
+# downloads the CPU-only wheel.
+
+# CUDA 12.1 (most modern NVIDIA GPUs, driver >= 530)
+# pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu121
+
+# CUDA 11.8 (older GPUs / older drivers)
+# pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu118
+
+# CUDA 12.4 (newest GPUs)
+# pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu124
+
+# ---- Step 2: install the rest of the stack -----------------------------
+#
+# After step 1 succeeds, run:
+#   pip install -r requirements-gpu.txt
+#
+# Verify the GPU is visible:
+#   python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# Data validation
+pydantic==2.7.1
+python-dotenv==1.0.1
+
+# Numerical core
+numpy==1.26.4
+
+# Testing
+pytest==8.2.0
+httpx==0.27.0
