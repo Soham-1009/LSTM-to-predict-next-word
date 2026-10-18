@@ -1,0 +1,446 @@
+{
+  "title": "Empirical Multi-Domain Generalization & Model Adaptation Report",
+  "description": "Zero-leakage pilot benchmark across 17 held-out documents spanning 6 functional domains (21,495 split tokens, 21,210 evaluated causal targets). Discloses measured regressions alongside cross-domain improvements.",
+  "benchmark_scope": {
+    "type": "Pilot Multi-Domain Benchmark",
+    "document_count": 17,
+    "domains_evaluated": 6,
+    "total_tokens": 21495,
+    "evaluated_target_tokens": 21210,
+    "causal_window_size": 35,
+    "document_boundary_safe": true
+  },
+  "timestamp_utc": "2026-10-18T06:40:00Z",
+  "baseline_metadata": {
+    "checkpoint": "backend/model_artifacts/checkpoints/best_val.pt",
+    "architecture": "2-Layer LSTM (embedding 256, hidden 512, vocab 30000, context 35)",
+    "primary_training": "WikiText-103 (103M tokens, 28,475 Wikipedia articles)"
+  },
+  "adapted_metadata": {
+    "checkpoint": "experiments/multidomain_v1/checkpoints/multidomain_adapted.pt",
+    "fine_tuning": "5 Epochs AdamW (LR 1e-4, weight_decay 0.01, grad_clip 1.0) on multi-domain pilot",
+    "vocabulary": "Preserved 30,000-token word vocabulary (100% backward and inference compatible)"
+  },
+  "leakage_audit_summary": {
+    "status": "AUDIT_PASSED",
+    "invariants_passed": "11/11",
+    "parent_source_overlap_pct": 0.0,
+    "clean_hash_overlap_pct": 0.0,
+    "document_boundary_safe": true,
+    "audit_script": "experiments/multidomain_v1/pilot/audit_pilot.py"
+  },
+  "full_test_baseline_reference": {
+    "dataset_name": "WikiText-103 Full Held-Out Test Split",
+    "documents": 2169,
+    "total_tokens_in_binary": 7971938,
+    "evaluated_target_tokens": 7932190,
+    "loss": 3.9174,
+    "perplexity": 50.27,
+    "top1_acc": 32.43,
+    "top3_acc": 47.51,
+    "top5_acc": 53.97,
+    "notes": "Authoritative evaluation of frozen best_val.pt on complete 7.93M token test split."
+  },
+  "token_weighted_summary": {
+    "weighting_type": "Token-Weighted Aggregate (all 21,210 evaluated targets)",
+    "description": "Aggregate evaluation across all 21,210 causal targets across 17 test documents in 6 domains (technical_docs contributes 8,960 targets, wikitext 4,585, etc.).",
+    "baseline": {
+      "total_documents": 17,
+      "total_tokens": 21495,
+      "oov_tokens": 970,
+      "oov_rate_pct": 4.51,
+      "vocab_coverage_pct": 95.49,
+      "loss": 4.136,
+      "perplexity": 62.56,
+      "top1_acc": 37.13,
+      "top3_acc": 49.08,
+      "top5_acc": 54.45,
+      "evaluated_tokens": 21210
+    },
+    "adapted": {
+      "total_documents": 17,
+      "total_tokens": 21495,
+      "oov_tokens": 970,
+      "oov_rate_pct": 4.51,
+      "vocab_coverage_pct": 95.49,
+      "loss": 3.6981,
+      "perplexity": 40.37,
+      "top1_acc": 40.14,
+      "top3_acc": 51.69,
+      "top5_acc": 57.11,
+      "evaluated_tokens": 21210
+    },
+    "deltas": {
+      "loss_delta": -0.4379,
+      "ppl_delta": -22.19,
+      "ppl_pct_change": -35.47,
+      "top1_delta": 3.01,
+      "top3_delta": 2.61,
+      "top5_delta": 2.66
+    }
+  },
+  "macro_average_summary": {
+    "weighting_type": "Equal-Weight Macro-Average (1/6 per domain)",
+    "description": "Equal-weight unweighted arithmetic mean across all 6 evaluated domains, preventing document size imbalance from dominating the metric.",
+    "baseline": {
+      "domain_count": 6,
+      "weighting_type": "equal_weight_per_domain",
+      "description": "Equal-weight unweighted arithmetic mean across all 6 evaluated domains",
+      "loss": 4.5929,
+      "perplexity": 117.98,
+      "geometric_perplexity": 98.78,
+      "top1_acc": 27.68,
+      "top3_acc": 40.79,
+      "top5_acc": 47.01
+    },
+    "adapted": {
+      "domain_count": 6,
+      "weighting_type": "equal_weight_per_domain",
+      "description": "Equal-weight unweighted arithmetic mean across all 6 evaluated domains",
+      "loss": 4.311,
+      "perplexity": 95.19,
+      "geometric_perplexity": 74.52,
+      "top1_acc": 29.32,
+      "top3_acc": 42.93,
+      "top5_acc": 48.72
+    },
+    "deltas": {
+      "loss_delta": -0.2819,
+      "ppl_delta": -22.79,
+      "ppl_pct_change": -19.32,
+      "geometric_ppl_delta": -24.26,
+      "geometric_ppl_pct_change": -24.56,
+      "top1_delta": 1.64,
+      "top3_delta": 2.14,
+      "top5_delta": 1.71
+    }
+  },
+  "overall_summary": {
+    "weighting_type": "Token-Weighted Aggregate (all 21,210 evaluated targets)",
+    "baseline": {
+      "total_documents": 17,
+      "total_tokens": 21495,
+      "oov_tokens": 970,
+      "oov_rate_pct": 4.51,
+      "vocab_coverage_pct": 95.49,
+      "loss": 4.136,
+      "perplexity": 62.56,
+      "top1_acc": 37.13,
+      "top3_acc": 49.08,
+      "top5_acc": 54.45,
+      "evaluated_tokens": 21210
+    },
+    "adapted": {
+      "total_documents": 17,
+      "total_tokens": 21495,
+      "oov_tokens": 970,
+      "oov_rate_pct": 4.51,
+      "vocab_coverage_pct": 95.49,
+      "loss": 3.6981,
+      "perplexity": 40.37,
+      "top1_acc": 40.14,
+      "top3_acc": 51.69,
+      "top5_acc": 57.11,
+      "evaluated_tokens": 21210
+    },
+    "deltas": {
+      "loss_delta": -0.4379,
+      "ppl_delta": -22.19,
+      "ppl_pct_change": -35.47,
+      "top1_delta": 3.01,
+      "top3_delta": 2.61,
+      "top5_delta": 2.66
+    }
+  },
+  "in_domain_retention": {
+    "baseline": {
+      "dataset_name": "WikiText-103 Held-Out Test Split (Retention Slice)",
+      "evaluation_scope": "Representative 22-Document Slice (100,820 tokens) with Strict Document Boundary Preservation",
+      "documents_in_slice": 22,
+      "tokens_in_slice": 100820,
+      "oov_tokens": 3852,
+      "oov_rate_pct": 3.82,
+      "vocab_coverage_pct": 96.18,
+      "loss": 3.9302,
+      "perplexity": 50.92,
+      "top1_acc": 32.29,
+      "top3_acc": 47.29,
+      "top5_acc": 54.06,
+      "evaluated_tokens": 100380
+    },
+    "adapted": {
+      "dataset_name": "WikiText-103 Held-Out Test Split (Retention Slice)",
+      "evaluation_scope": "Representative 22-Document Slice (100,820 tokens) with Strict Document Boundary Preservation",
+      "documents_in_slice": 22,
+      "tokens_in_slice": 100820,
+      "oov_tokens": 3852,
+      "oov_rate_pct": 3.82,
+      "vocab_coverage_pct": 96.18,
+      "loss": 3.976,
+      "perplexity": 53.3,
+      "top1_acc": 31.79,
+      "top3_acc": 46.82,
+      "top5_acc": 53.52,
+      "evaluated_tokens": 100380
+    },
+    "deltas": {
+      "loss_delta": 0.0458,
+      "ppl_delta": 2.38,
+      "ppl_pct_change": 4.67,
+      "top1_delta": -0.5,
+      "top5_delta": -0.54,
+      "catastrophic_forgetting": false,
+      "retention_status": "measured_regression",
+      "description": "Measured regression on the original source domain (+0.0458 loss, +2.38 PPL, -0.50% Top-1, -0.54% Top-5) reflecting the empirical plasticity-stability trade-off during out-of-domain adaptation."
+    }
+  },
+  "domain_breakdown": [
+    {
+      "domain": "conversation",
+      "domain_type": "Cross-Domain (Unseen Source)",
+      "document_count": 3,
+      "tokens": 2455,
+      "evaluated_tokens": 2380,
+      "oov_rate_pct": 4.85,
+      "vocab_coverage_pct": 95.15,
+      "baseline": {
+        "loss": 5.1094,
+        "perplexity": 165.57,
+        "top1_acc": 17.14,
+        "top3_acc": 31.55,
+        "top5_acc": 38.11
+      },
+      "adapted": {
+        "loss": 4.9944,
+        "perplexity": 147.58,
+        "top1_acc": 17.31,
+        "top3_acc": 32.35,
+        "top5_acc": 39.75
+      },
+      "deltas": {
+        "loss_delta": -0.115,
+        "ppl_delta": -17.99,
+        "top1_delta": 0.17,
+        "top3_delta": 0.8,
+        "top5_delta": 1.64,
+        "improved": true,
+        "regressed": false,
+        "notes": null
+      }
+    },
+    {
+      "domain": "literature",
+      "domain_type": "Cross-Domain (Unseen Source)",
+      "document_count": 1,
+      "tokens": 2613,
+      "evaluated_tokens": 2590,
+      "oov_rate_pct": 3.1,
+      "vocab_coverage_pct": 96.9,
+      "baseline": {
+        "loss": 5.038,
+        "perplexity": 154.16,
+        "top1_acc": 17.64,
+        "top3_acc": 32.93,
+        "top5_acc": 39.88
+      },
+      "adapted": {
+        "loss": 4.8494,
+        "perplexity": 127.67,
+        "top1_acc": 19.61,
+        "top3_acc": 34.59,
+        "top5_acc": 41.2
+      },
+      "deltas": {
+        "loss_delta": -0.1886,
+        "ppl_delta": -26.49,
+        "top1_delta": 1.97,
+        "top3_delta": 1.66,
+        "top5_delta": 1.32,
+        "improved": true,
+        "regressed": false,
+        "notes": null
+      }
+    },
+    {
+      "domain": "news",
+      "domain_type": "Cross-Domain (Unseen Source)",
+      "document_count": 5,
+      "tokens": 853,
+      "evaluated_tokens": 770,
+      "oov_rate_pct": 6.68,
+      "vocab_coverage_pct": 93.32,
+      "baseline": {
+        "loss": 5.2274,
+        "perplexity": 186.3,
+        "top1_acc": 20.13,
+        "top3_acc": 31.95,
+        "top5_acc": 38.96
+      },
+      "adapted": {
+        "loss": 4.8054,
+        "perplexity": 122.17,
+        "top1_acc": 21.69,
+        "top3_acc": 37.01,
+        "top5_acc": 40.91
+      },
+      "deltas": {
+        "loss_delta": -0.422,
+        "ppl_delta": -64.13,
+        "top1_delta": 1.56,
+        "top3_delta": 5.06,
+        "top5_delta": 1.95,
+        "improved": true,
+        "regressed": false,
+        "notes": null
+      }
+    },
+    {
+      "domain": "scientific",
+      "domain_type": "Cross-Domain (Unseen Source)",
+      "document_count": 3,
+      "tokens": 1946,
+      "evaluated_tokens": 1925,
+      "oov_rate_pct": 5.34,
+      "vocab_coverage_pct": 94.66,
+      "baseline": {
+        "loss": 4.7833,
+        "perplexity": 119.49,
+        "top1_acc": 24.05,
+        "top3_acc": 37.71,
+        "top5_acc": 44.16
+      },
+      "adapted": {
+        "loss": 4.6987,
+        "perplexity": 109.81,
+        "top1_acc": 23.84,
+        "top3_acc": 38.34,
+        "top5_acc": 44.57
+      },
+      "deltas": {
+        "loss_delta": -0.0846,
+        "ppl_delta": -9.68,
+        "top1_delta": -0.21,
+        "top3_delta": 0.63,
+        "top5_delta": 0.41,
+        "improved": true,
+        "regressed": false,
+        "notes": "Perplexity improved by -9.68 and Top-5 by +0.41%, but Top-1 accuracy had a slight measured regression of -0.21%."
+      }
+    },
+    {
+      "domain": "technical_docs",
+      "domain_type": "Cross-Domain (Unseen Source)",
+      "document_count": 3,
+      "tokens": 8990,
+      "evaluated_tokens": 8960,
+      "oov_rate_pct": 5.41,
+      "vocab_coverage_pct": 94.59,
+      "baseline": {
+        "loss": 3.5102,
+        "perplexity": 33.46,
+        "top1_acc": 54.82,
+        "top3_acc": 63.1,
+        "top5_acc": 66.61
+      },
+      "adapted": {
+        "loss": 2.5963,
+        "perplexity": 13.41,
+        "top1_acc": 61.29,
+        "top3_acc": 68.3,
+        "top5_acc": 72.13
+      },
+      "deltas": {
+        "loss_delta": -0.9139,
+        "ppl_delta": -20.05,
+        "top1_delta": 6.47,
+        "top3_delta": 5.2,
+        "top5_delta": 5.52,
+        "improved": true,
+        "regressed": false,
+        "notes": null
+      }
+    },
+    {
+      "domain": "wikitext103_replay",
+      "domain_type": "In-Domain Replay",
+      "document_count": 2,
+      "tokens": 4638,
+      "evaluated_tokens": 4585,
+      "oov_rate_pct": 2.65,
+      "vocab_coverage_pct": 97.35,
+      "baseline": {
+        "loss": 3.8893,
+        "perplexity": 48.88,
+        "top1_acc": 32.28,
+        "top3_acc": 47.52,
+        "top5_acc": 54.31
+      },
+      "adapted": {
+        "loss": 3.9221,
+        "perplexity": 50.51,
+        "top1_acc": 32.17,
+        "top3_acc": 46.98,
+        "top5_acc": 53.76
+      },
+      "deltas": {
+        "loss_delta": 0.0328,
+        "ppl_delta": 1.63,
+        "top1_delta": -0.11,
+        "top3_delta": -0.54,
+        "top5_delta": -0.55,
+        "improved": false,
+        "regressed": true,
+        "notes": "Measured in-domain regression (+0.0328 loss, +1.63 PPL, -0.11% Top-1, -0.55% Top-5) due to parameter adaptation toward out-of-domain text."
+      }
+    }
+  ],
+  "qualitative_comparison": [
+    {
+      "domain": "expository_wikitext",
+      "prompt": "The history of the modern world",
+      "baseline_greedy": "the history of the modern world. the first of these was the first of the first two books of the first world war, and the first of the first",
+      "adapted_greedy": "the history of the modern world. the first of these was the first of the first two years of the first world war, and was the first of the",
+      "baseline_sampling": "the history of the modern world, but he also has a \" huge fascination \" with the world. he is a member of the world community of people in",
+      "adapted_sampling": "the history of the modern world. \" the story of the events of the story, which is a \" monster \", is considered a major theme from the"
+    },
+    {
+      "domain": "scientific",
+      "prompt": "The experimental results demonstrate that",
+      "baseline_greedy": "the experimental results demonstrate that the < unk > of the < unk > is a \" < unk > \", which is a \" < unk > \"",
+      "adapted_greedy": "the experimental results demonstrate that the first of these is the first step in the study of the study of the study of the study of the study of the",
+      "baseline_sampling": "the experimental results demonstrate that the main reason for the project was to be in the united states. \" it' s not to be a problem. it",
+      "adapted_sampling": "the experimental results demonstrate that the < unk > (a) and non @ - @ structural (the < unk >) (d.) are a"
+    },
+    {
+      "domain": "technical_docs",
+      "prompt": "In computer science, a function",
+      "baseline_greedy": "in computer science, a function of the same name. the first of these was the first of the first two games, which was published in the united states",
+      "adapted_greedy": "in computer science, a function that is used to describe the use of the term \" < unk > \". the term \" < unk > \" is used",
+      "baseline_sampling": "in computer science, a function of which, with the addition of the first major, the computer has been called the \" second @ - @ largest research facility",
+      "adapted_sampling": "in computer science, a function he had studied for the first time, but he was not able to write that. the program had a profound effect on the"
+    },
+    {
+      "domain": "literature",
+      "prompt": "She walked slowly into the quiet",
+      "baseline_greedy": "she walked slowly into the quiet room, and she was able to get her back to the floor. she was then taken to the hospital, where she was",
+      "adapted_greedy": "she walked slowly into the quiet room, and was able to get her back to the room. she was then taken to the hospital, where she was buried",
+      "baseline_sampling": "she walked slowly into the quiet room. when they were talking about the situation in the streets, they told him to keep her in the studio to look like",
+      "adapted_sampling": "she walked slowly into the quiet room and was at the moment the next morning................"
+    },
+    {
+      "domain": "conversation",
+      "prompt": "Can you tell me what happened",
+      "baseline_greedy": "can you tell me what happened to me. \" the song was written by the band' s producer, david foster, and was written by mark < unk",
+      "adapted_greedy": "can you tell me what happened to me. i am not sure i am not going to be able to do so. i am not sure i am going",
+      "baseline_sampling": "can you tell me what happened on a road? \". he is then seen to leave the club with his mother, and the baby becomes a \" boy",
+      "adapted_sampling": "can you tell me what happened to him. i thought it was a great, great, great and great time, and i am the man who had ever"
+    }
+  ],
+  "metric_limitations": {
+    "word_level_oov": "Fixed 30,000 word-level vocabulary replaces unknown words with <unk>. In technical/news domains, OOV rate ranges from 5.3% to 6.7%, masking true semantic prediction quality on named entities.",
+    "perplexity_interpretation": "Perplexity is vocabulary-dependent: PPL=40 on a 30k vocabulary means effective uncertainty across 40 words out of 30,000. It cannot be directly compared against byte/subword models.",
+    "top1_vs_top5": "In natural language, multiple valid completions exist. Top-1 penalizes equally valid synonyms, making Top-5 (57.1% on adapted) a more realistic proxy for language comprehension.",
+    "qualitative_heuristics": "Plausible surface syntax can hide factual hallucinations or local repetition loops. Evaluation must combine automated cross-entropy with human audit.",
+    "pilot_scope": "The multi-domain benchmark comprises 17 documents (21,495 tokens). While statistically sound and strictly leak-free, it is a pilot benchmark and does not imply universal open-ended generalization across uncurated corpora."
+  }
+}

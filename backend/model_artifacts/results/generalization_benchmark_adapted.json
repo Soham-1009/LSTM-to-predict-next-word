@@ -1,0 +1,163 @@
+{
+  "model_label": "adapted_multidomain",
+  "checkpoint_path": "experiments\\multidomain_v1\\checkpoints\\multidomain_adapted.pt",
+  "device": "cuda",
+  "timestamp_utc": "2026-10-18T06:40:00Z",
+  "per_domain_results": {
+    "conversation": {
+      "domain": "conversation",
+      "document_count": 3,
+      "total_tokens": 2455,
+      "oov_tokens": 119,
+      "oov_rate_pct": 4.85,
+      "vocab_coverage_pct": 95.15,
+      "loss": 4.9944,
+      "perplexity": 147.58,
+      "top1_acc": 17.31,
+      "top3_acc": 32.35,
+      "top5_acc": 39.75,
+      "evaluated_tokens": 2380
+    },
+    "literature": {
+      "domain": "literature",
+      "document_count": 1,
+      "total_tokens": 2613,
+      "oov_tokens": 81,
+      "oov_rate_pct": 3.1,
+      "vocab_coverage_pct": 96.9,
+      "loss": 4.8494,
+      "perplexity": 127.67,
+      "top1_acc": 19.61,
+      "top3_acc": 34.59,
+      "top5_acc": 41.2,
+      "evaluated_tokens": 2590
+    },
+    "news": {
+      "domain": "news",
+      "document_count": 5,
+      "total_tokens": 853,
+      "oov_tokens": 57,
+      "oov_rate_pct": 6.68,
+      "vocab_coverage_pct": 93.32,
+      "loss": 4.8054,
+      "perplexity": 122.17,
+      "top1_acc": 21.69,
+      "top3_acc": 37.01,
+      "top5_acc": 40.91,
+      "evaluated_tokens": 770
+    },
+    "scientific": {
+      "domain": "scientific",
+      "document_count": 3,
+      "total_tokens": 1946,
+      "oov_tokens": 104,
+      "oov_rate_pct": 5.34,
+      "vocab_coverage_pct": 94.66,
+      "loss": 4.6987,
+      "perplexity": 109.81,
+      "top1_acc": 23.84,
+      "top3_acc": 38.34,
+      "top5_acc": 44.57,
+      "evaluated_tokens": 1925
+    },
+    "technical_docs": {
+      "domain": "technical_docs",
+      "document_count": 3,
+      "total_tokens": 8990,
+      "oov_tokens": 486,
+      "oov_rate_pct": 5.41,
+      "vocab_coverage_pct": 94.59,
+      "loss": 2.5963,
+      "perplexity": 13.41,
+      "top1_acc": 61.29,
+      "top3_acc": 68.3,
+      "top5_acc": 72.13,
+      "evaluated_tokens": 8960
+    },
+    "wikitext103_replay": {
+      "domain": "wikitext103_replay",
+      "document_count": 2,
+      "total_tokens": 4638,
+      "oov_tokens": 123,
+      "oov_rate_pct": 2.65,
+      "vocab_coverage_pct": 97.35,
+      "loss": 3.9221,
+      "perplexity": 50.51,
+      "top1_acc": 32.17,
+      "top3_acc": 46.98,
+      "top5_acc": 53.76,
+      "evaluated_tokens": 4585
+    }
+  },
+  "overall_multidomain": {
+    "total_documents": 17,
+    "total_tokens": 21495,
+    "oov_tokens": 970,
+    "oov_rate_pct": 4.51,
+    "vocab_coverage_pct": 95.49,
+    "loss": 3.6981,
+    "perplexity": 40.37,
+    "top1_acc": 40.14,
+    "top3_acc": 51.69,
+    "top5_acc": 57.11,
+    "evaluated_tokens": 21210
+  },
+  "wikitext_retention": {
+    "dataset_name": "WikiText-103 Held-Out Test Split (Retention Slice)",
+    "evaluation_scope": "Representative 22-Document Slice (100,820 tokens) with Strict Document Boundary Preservation",
+    "documents_in_slice": 22,
+    "tokens_in_slice": 100820,
+    "oov_tokens": 3852,
+    "oov_rate_pct": 3.82,
+    "vocab_coverage_pct": 96.18,
+    "loss": 3.976,
+    "perplexity": 53.3,
+    "top1_acc": 31.79,
+    "top3_acc": 46.82,
+    "top5_acc": 53.52,
+    "evaluated_tokens": 100380
+  },
+  "qualitative_samples": [
+    {
+      "domain": "expository_wikitext",
+      "prompt": "The history of the modern world",
+      "greedy_generation": "the history of the modern world. the first of these was the first of the first two years of the first world war, and was the first of the",
+      "sampling_generation": "the history of the modern world. \" the story of the events of the story, which is a \" monster \", is considered a major theme from the"
+    },
+    {
+      "domain": "scientific",
+      "prompt": "The experimental results demonstrate that",
+      "greedy_generation": "the experimental results demonstrate that the first of these is the first step in the study of the study of the study of the study of the study of the",
+      "sampling_generation": "the experimental results demonstrate that the < unk > (a) and non @ - @ structural (the < unk >) (d.) are a"
+    },
+    {
+      "domain": "technical_docs",
+      "prompt": "In computer science, a function",
+      "greedy_generation": "in computer science, a function that is used to describe the use of the term \" < unk > \". the term \" < unk > \" is used",
+      "sampling_generation": "in computer science, a function he had studied for the first time, but he was not able to write that. the program had a profound effect on the"
+    },
+    {
+      "domain": "literature",
+      "prompt": "She walked slowly into the quiet",
+      "greedy_generation": "she walked slowly into the quiet room, and was able to get her back to the room. she was then taken to the hospital, where she was buried",
+      "sampling_generation": "she walked slowly into the quiet room and was at the moment the next morning................"
+    },
+    {
+      "domain": "conversation",
+      "prompt": "Can you tell me what happened",
+      "greedy_generation": "can you tell me what happened to me. i am not sure i am not going to be able to do so. i am not sure i am going",
+      "sampling_generation": "can you tell me what happened to him. i thought it was a great, great, great and great time, and i am the man who had ever"
+    }
+  ],
+  "macro_average_multidomain": {
+    "domain_count": 6,
+    "weighting_type": "equal_weight_per_domain",
+    "description": "Equal-weight unweighted arithmetic mean across all 6 evaluated domains",
+    "loss": 4.311,
+    "perplexity": 95.19,
+    "geometric_perplexity": 74.52,
+    "top1_acc": 29.32,
+    "top3_acc": 42.93,
+    "top5_acc": 48.72
+  }
+}

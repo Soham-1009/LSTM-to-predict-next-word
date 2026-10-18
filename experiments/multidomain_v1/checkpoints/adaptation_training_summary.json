@@ -1,0 +1,61 @@
+{
+  "experiment_name": "multidomain_v1_domain_adaptation",
+  "baseline_checkpoint": "backend\\model_artifacts\\checkpoints\\best_val.pt",
+  "adapted_checkpoint": "experiments\\multidomain_v1\\checkpoints\\multidomain_adapted.pt",
+  "device": "cuda",
+  "learning_rate": 0.0001,
+  "epochs": 5,
+  "batch_size": 32,
+  "baseline_pilot_val_loss": 4.8715,
+  "baseline_pilot_val_ppl": 130.52,
+  "adapted_pilot_val_loss": 4.6587,
+  "adapted_pilot_val_ppl": 105.5,
+  "total_training_seconds": 24.56,
+  "epoch_records": [
+    {
+      "epoch": 1,
+      "train_loss": 4.4602,
+      "val_loss": 4.7748,
+      "val_perplexity": 118.49,
+      "val_top1_accuracy": 22.62,
+      "val_top5_accuracy": 43.53,
+      "duration_seconds": 5.06
+    },
+    {
+      "epoch": 2,
+      "train_loss": 4.3261,
+      "val_loss": 4.7311,
+      "val_perplexity": 113.42,
+      "val_top1_accuracy": 22.63,
+      "val_top5_accuracy": 43.73,
+      "duration_seconds": 4.62
+    },
+    {
+      "epoch": 3,
+      "train_loss": 4.2355,
+      "val_loss": 4.7005,
+      "val_perplexity": 110.0,
+      "val_top1_accuracy": 22.8,
+      "val_top5_accuracy": 43.95,
+      "duration_seconds": 4.57
+    },
+    {
+      "epoch": 4,
+      "train_loss": 4.16,
+      "val_loss": 4.6769,
+      "val_perplexity": 107.44,
+      "val_top1_accuracy": 22.81,
+      "val_top5_accuracy": 44.39,
+      "duration_seconds": 4.6
+    },
+    {
+      "epoch": 5,
+      "train_loss": 4.0962,
+      "val_loss": 4.6587,
+      "val_perplexity": 105.5,
+      "val_top1_accuracy": 22.87,
+      "val_top5_accuracy": 44.7,
+      "duration_seconds": 4.55
+    }
+  ]
+}

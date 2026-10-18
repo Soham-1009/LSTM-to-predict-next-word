@@ -1,0 +1,338 @@
+{
+  "metadata": {
+    "project": "LSTM Next-Word Prediction & Text Generation System",
+    "experiment": "multidomain_v1",
+    "phase": "Phase 3D.3",
+    "description": "Authoritative machine-readable evaluation allocation configuration defining parent source counts, token budgets, and evaluation tiers across Scenario A and Scenario B.",
+    "created_at": "2026-10-15T13:20:00Z",
+    "version": "1.0.0"
+  },
+  "tier_definitions": {
+    "tier_1": {
+      "name": "Statistically Adequate Model Evaluation",
+      "min_val_parents": 20,
+      "min_test_parents": 20,
+      "description": "Generalization benchmark across multiple independent parent works; supports clustered bootstrap confidence intervals."
+    },
+    "tier_2": {
+      "name": "Preliminary Domain Evaluation (Small Sample)",
+      "min_val_parents": 5,
+      "min_test_parents": 5,
+      "description": "Preliminary domain canary; detects gross trends or catastrophic failure but carries higher authorial variance."
+    },
+    "tier_3": {
+      "name": "Pipeline Integrity Smoke-Test",
+      "min_val_parents": 1,
+      "min_test_parents": 1,
+      "description": "Format and pipeline mechanics validation only; zero statistical validity for generalizability claims."
+    }
+  },
+  "scenarios": {
+    "scenario_a": {
+      "name": "Scenario A — Commercial Deployment Candidate",
+      "total_corpus_tokens": 40000000,
+      "train_tokens": 32000000,
+      "val_tokens": 4000000,
+      "test_tokens": 4000000,
+      "split_ratios": { "train": 0.80, "val": 0.10, "test": 0.10 },
+      "sharealike_excluded": true,
+      "non_commercial_excluded": true,
+      "variants": {
+        "heuristic_news": {
+          "description": "Heuristic variant: 20 independent stories per evaluation split",
+          "domains": {
+            "wikitext103_replay": {
+              "status": "EXCLUDED",
+              "exclusion_reason": "ShareAlike (CC-BY-SA 3.0) excluded from commercial candidate",
+              "val_parents": 0,
+              "test_parents": 0,
+              "val_tokens": 0,
+              "test_tokens": 0,
+              "eval_tier": "NOT_APPLICABLE"
+            },
+            "literature": {
+              "status": "APPROVED",
+              "source": "Project Gutenberg Curated Prose (Pre-1929, Author d. pre-1946)",
+              "license": "Public Domain (17 U.S.C. § 304)",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 75000,
+              "val_tokens": 1500000,
+              "test_tokens": 1500000,
+              "eval_tier": "tier_1"
+            },
+            "scientific": {
+              "status": "APPROVED",
+              "source": "PubMed Central Open Access (oa_comm CC-BY 4.0 / CC0)",
+              "license": "CC-BY 4.0 / CC0",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 5000,
+              "val_tokens": 100000,
+              "test_tokens": 100000,
+              "eval_tier": "tier_1"
+            },
+            "technical_docs": {
+              "status": "APPROVED",
+              "source": "IETF RFCs, Python 3 Documentation, PyTorch Documentation",
+              "license": "IETF Trust TLP 5.0, PSF v2, BSD-3-Clause",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 8000,
+              "val_tokens": 160000,
+              "test_tokens": 160000,
+              "eval_tier": "tier_1"
+            },
+            "conversation": {
+              "status": "APPROVED_QUALIFIED",
+              "source": "Project Gutenberg Public Domain Dramatic Plays (Pre-1929, Author d. pre-1946)",
+              "license": "Public Domain",
+              "val_parents": 10,
+              "test_parents": 10,
+              "tokens_per_parent": 20000,
+              "val_tokens": 200000,
+              "test_tokens": 200000,
+              "eval_tier": "tier_2",
+              "tier_rationale": "Deliberately allocated 10 val / 10 test parents due to finite public domain drama catalog (~60 plays total). Does not meet Tier 1 heuristic; honestly labeled Tier 2."
+            },
+            "news": {
+              "status": "APPROVED",
+              "source": "English WikiNews (CC-BY 2.5 pre-Dec 16, 2024 / CC-BY 4.0 post-Dec 16, 2024)",
+              "license": "CC-BY 2.5 / CC-BY 4.0",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 450,
+              "val_tokens": 9000,
+              "test_tokens": 9000,
+              "eval_tier": "tier_1",
+              "tier_rationale": "Satisfies Tier 1 parent count heuristic (>=20 parents) at modest token volume (~9k tokens) based on observed ~450 tokens/story."
+            }
+          },
+          "computed_totals": {
+            "val_parents": 90,
+            "test_parents": 90,
+            "total_held_out_parents": 180,
+            "val_tokens": 1969000,
+            "test_tokens": 1969000,
+            "total_eval_tokens": 3938000
+          }
+        },
+        "scaled_news": {
+          "description": "Scaled-news variant: 200 independent stories per evaluation split",
+          "domains": {
+            "wikitext103_replay": {
+              "status": "EXCLUDED",
+              "val_parents": 0,
+              "test_parents": 0,
+              "val_tokens": 0,
+              "test_tokens": 0,
+              "eval_tier": "NOT_APPLICABLE"
+            },
+            "literature": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 1500000,
+              "test_tokens": 1500000,
+              "eval_tier": "tier_1"
+            },
+            "scientific": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 100000,
+              "test_tokens": 100000,
+              "eval_tier": "tier_1"
+            },
+            "technical_docs": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 160000,
+              "test_tokens": 160000,
+              "eval_tier": "tier_1"
+            },
+            "conversation": {
+              "status": "APPROVED_QUALIFIED",
+              "val_parents": 10,
+              "test_parents": 10,
+              "val_tokens": 200000,
+              "test_tokens": 200000,
+              "eval_tier": "tier_2"
+            },
+            "news": {
+              "status": "APPROVED",
+              "val_parents": 200,
+              "test_parents": 200,
+              "tokens_per_parent": 450,
+              "val_tokens": 90000,
+              "test_tokens": 90000,
+              "eval_tier": "tier_1"
+            }
+          },
+          "computed_totals": {
+            "val_parents": 270,
+            "test_parents": 270,
+            "total_held_out_parents": 540,
+            "val_tokens": 2050000,
+            "test_tokens": 2050000,
+            "total_eval_tokens": 4100000
+          }
+        }
+      }
+    },
+    "scenario_b": {
+      "name": "Scenario B — Corpus with ShareAlike Sources (Open-Weights)",
+      "total_corpus_tokens": 60000000,
+      "train_tokens": 48000000,
+      "val_tokens": 6000000,
+      "test_tokens": 6000000,
+      "split_ratios": { "train": 0.80, "val": 0.10, "test": 0.10 },
+      "sharealike_excluded": false,
+      "non_commercial_excluded": true,
+      "variants": {
+        "heuristic_news": {
+          "description": "Heuristic variant: 20 independent stories per evaluation split",
+          "domains": {
+            "wikitext103_replay": {
+              "status": "APPROVED",
+              "source": "WikiText-103 Training Split (sampled from wiki.train.tokens)",
+              "license": "CC-BY-SA 3.0",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 4000,
+              "val_tokens": 80000,
+              "test_tokens": 80000,
+              "eval_tier": "tier_1"
+            },
+            "literature": {
+              "status": "APPROVED",
+              "source": "Project Gutenberg Curated Prose",
+              "license": "Public Domain (17 U.S.C. § 304)",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 75000,
+              "val_tokens": 1500000,
+              "test_tokens": 1500000,
+              "eval_tier": "tier_1"
+            },
+            "scientific": {
+              "status": "APPROVED",
+              "source": "PubMed Central Open Access (oa_comm CC-BY 4.0 / CC0)",
+              "license": "CC-BY 4.0 / CC0",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 5000,
+              "val_tokens": 100000,
+              "test_tokens": 100000,
+              "eval_tier": "tier_1"
+            },
+            "technical_docs": {
+              "status": "APPROVED",
+              "source": "IETF RFCs, Python 3 Documentation, MDN Web Docs",
+              "license": "IETF Trust, PSF v2, CC-BY-SA 2.5",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 8000,
+              "val_tokens": 160000,
+              "test_tokens": 160000,
+              "eval_tier": "tier_1"
+            },
+            "conversation": {
+              "status": "APPROVED",
+              "source": "Ubuntu Dialogue Corpus v2.0 (CC-BY-SA 3.0) + PD Dramatic Plays",
+              "license": "CC-BY-SA 3.0 + Public Domain",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 10000,
+              "val_tokens": 200000,
+              "test_tokens": 200000,
+              "eval_tier": "tier_1"
+            },
+            "news": {
+              "status": "APPROVED",
+              "source": "English WikiNews",
+              "license": "CC-BY 2.5 / CC-BY 4.0",
+              "val_parents": 20,
+              "test_parents": 20,
+              "tokens_per_parent": 450,
+              "val_tokens": 9000,
+              "test_tokens": 9000,
+              "eval_tier": "tier_1"
+            }
+          },
+          "computed_totals": {
+            "val_parents": 120,
+            "test_parents": 120,
+            "total_held_out_parents": 240,
+            "val_tokens": 2049000,
+            "test_tokens": 2049000,
+            "total_eval_tokens": 4098000
+          }
+        },
+        "scaled_news": {
+          "description": "Scaled-news variant: 200 independent stories per evaluation split",
+          "domains": {
+            "wikitext103_replay": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 80000,
+              "test_tokens": 80000,
+              "eval_tier": "tier_1"
+            },
+            "literature": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 1500000,
+              "test_tokens": 1500000,
+              "eval_tier": "tier_1"
+            },
+            "scientific": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 100000,
+              "test_tokens": 100000,
+              "eval_tier": "tier_1"
+            },
+            "technical_docs": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 160000,
+              "test_tokens": 160000,
+              "eval_tier": "tier_1"
+            },
+            "conversation": {
+              "status": "APPROVED",
+              "val_parents": 20,
+              "test_parents": 20,
+              "val_tokens": 200000,
+              "test_tokens": 200000,
+              "eval_tier": "tier_1"
+            },
+            "news": {
+              "status": "APPROVED",
+              "val_parents": 200,
+              "test_parents": 200,
+              "tokens_per_parent": 450,
+              "val_tokens": 90000,
+              "test_tokens": 90000,
+              "eval_tier": "tier_1"
+            }
+          },
+          "computed_totals": {
+            "val_parents": 300,
+            "test_parents": 300,
+            "total_held_out_parents": 600,
+            "val_tokens": 2130000,
+            "test_tokens": 2130000,
+            "total_eval_tokens": 4260000
+          }
+        }
+      }
+    }
+  }
+}

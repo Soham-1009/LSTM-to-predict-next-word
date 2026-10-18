@@ -1,0 +1,101 @@
+{
+  "experiment_id": "multidomain_v1_pilot",
+  "phase": "Phase 3C: Final Pilot Integrity Audit and Readiness Gate",
+  "status": "VALIDATION_ONLY_NO_TRAINING",
+  "random_seed": 42,
+  "pilot_token_limit": 1000000,
+  "target_pilot_tokens": 165000,
+  "context_length": 35,
+  "split_ratios": {
+    "train": 0.80,
+    "val": 0.10,
+    "test": 0.10
+  },
+  "parent_source_splitting": {
+    "enabled": true,
+    "strategy": "stratified_by_domain",
+    "enforce_zero_parent_overlap": true,
+    "enforce_per_domain_split_coverage": true,
+    "document_boundary_safe_dataset": true,
+    "authoritative_audit_enforced": true
+  },
+  "vocabulary": {
+    "path": "backend/model_artifacts/tokenizer/vocab.json",
+    "expected_vocab_size": 30000,
+    "expected_special_tokens": {
+      "<PAD>": 0,
+      "<UNK>": 1,
+      "<BOS>": 2,
+      "<EOS>": 3
+    }
+  },
+  "storage": {
+    "pilot_dir": "experiments/multidomain_v1/pilot",
+    "processed_dir": "experiments/multidomain_v1/pilot/processed",
+    "manifest_path": "experiments/multidomain_v1/pilot/pilot_manifest.jsonl",
+    "metadata_path": "experiments/multidomain_v1/pilot/processed/metadata.json",
+    "report_path": "experiments/multidomain_v1/pilot/REAL_DATA_PILOT_REPORT.md"
+  },
+  "domains": {
+    "wikitext103_replay": {
+      "target_share": 0.25,
+      "source_name": "WikiText-103 Training Split (wiki.train.tokens)",
+      "canonical_url": "https://blog.salesforceairesearch.com/the-wikitext-long-term-dependency-language-modeling-dataset/",
+      "license": "CC-BY-SA 3.0",
+      "license_status": "APPROVED",
+      "attribution": "Stephen Merity et al. (Salesforce Research) / Wikipedia contributors",
+      "evidence_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "terms_notes": "Exclusively sampled from the training partition; zero test tokens ingested."
+    },
+    "literature": {
+      "target_share": 0.15,
+      "source_name": "Project Gutenberg US Public Domain Fiction (Pre-1929)",
+      "canonical_url": "https://www.gutenberg.org/",
+      "license": "Public Domain in the United States (Pre-1929)",
+      "license_status": "APPROVED",
+      "attribution": "Project Gutenberg Literary Archive Foundation",
+      "evidence_url": "https://www.gutenberg.org/policy/license.html",
+      "jurisdiction_notes": "Works published before 1929 are US public domain (17 U.S.C. § 304). Authors (Shelley, Austen, Dickens, Stoker, Doyle) verified against EU/UK life+70 rules; all authors deceased >70 years. Note: Doyle (d. 1930) remains protected in Mexico (life+100) until 2031. Standard Gutenberg headers/footers stripped."
+    },
+    "technical_docs": {
+      "target_share": 0.15,
+      "source_name": "IETF RFC Standards & Python Official Documentation",
+      "canonical_url": "https://www.rfc-editor.org/ / https://github.com/python/cpython/tree/main/Doc",
+      "license": "IETF Trust Legal Provisions (RFC 5378) / PSF License v2",
+      "license_status": "APPROVED",
+      "attribution": "IETF Trust / Python Software Foundation",
+      "evidence_url": "https://trustee.ietf.org/license-info / https://docs.python.org/3/license.html",
+      "terms_notes": "Standard specifications and open-source documentation. ASCII bit diagrams filtered."
+    },
+    "scientific": {
+      "target_share": 0.15,
+      "source_name": "PubMed Central (PMC) Open Access Verified CC-BY 4.0 Subset",
+      "canonical_url": "https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/",
+      "license": "Creative Commons Attribution 4.0 International (CC-BY 4.0)",
+      "license_status": "APPROVED",
+      "attribution": "National Library of Medicine (NLM) / Original Article Authors / PLoS",
+      "evidence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "terms_notes": "Machine-readable XML <license_ref> parsed directly from article JATS XML. All articles verified strictly CC-BY 4.0 (CC-BY-NC, CC-BY-SA, CC-BY-ND rejected; generic text without machine ref rejected)."
+    },
+    "conversation": {
+      "target_share": 0.15,
+      "source_name": "Public Domain Dramatic Dialogue Plays (Wilde, Shaw)",
+      "canonical_url": "https://www.gutenberg.org/cache/epub/844/ / https://www.gutenberg.org/cache/epub/3825/",
+      "license": "Public Domain in the United States (Pre-1929)",
+      "license_status": "APPROVED",
+      "attribution": "Project Gutenberg Literary Archive Foundation",
+      "evidence_url": "https://www.gutenberg.org/policy/license.html",
+      "jurisdiction_notes": "Pre-1929 published dramatic works in US public domain. Wilde (d. 1900, life+126y) and Shaw (Pygmalion 1913, Shaw d. 1950, life+75y) verified. Note: Shaw remains protected in Spain (life+80 for pre-1987 deaths) until 2031 and Mexico (life+100) until 2051. Multi-turn theatrical conversations with distinct speaker turns."
+    },
+    "news": {
+      "target_share": 0.15,
+      "source_name": "Reuters-21578 Financial & Macroeconomic Journalism Archive",
+      "canonical_url": "https://kdd.ics.uci.edu/databases/reuters21578/reuters21578.html",
+      "license": "Open Academic & Research Use (Reuters Ltd. / Carnegie Group)",
+      "license_status": "CONDITIONAL",
+      "attribution": "David D. Lewis et al. / Reuters Ltd.",
+      "evidence_url": "https://kdd.ics.uci.edu/databases/reuters21578/README.txt",
+      "reconciliation_notes": "UCI repository README records that Reuters Ltd. and Carnegie Group made articles freely available for text categorization research. NLTK package metadata restricts use to research. Labeled CONDITIONAL: permitted for non-commercial research, benchmarking, and language model adaptation; commercial redistribution of the raw text corpus is prohibited."
+    }
+  }
+}

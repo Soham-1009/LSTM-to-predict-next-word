@@ -1,0 +1,136 @@
+{
+  "benchmark_title": "LSTM Language Model Inference Performance Benchmark",
+  "timestamp_utc": "2026-10-09T14:32:33Z",
+  "environment": {
+    "hardware_device": "cuda",
+    "gpu_model": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "cuda_available": true,
+    "cuda_version": "12.4",
+    "pytorch_version": "2.6.0+cu124",
+    "vram_total_mb": 4095.5,
+    "concurrency": 1,
+    "batch_size": 1
+  },
+  "model_configuration": {
+    "checkpoint": "best_val.pt (Epoch 46)",
+    "vocab_size": 30000,
+    "embed_dim": 256,
+    "hidden_dim": 512,
+    "num_layers": 2,
+    "dropout": 0.3,
+    "context_length": 35,
+    "parameters": 26748208
+  },
+  "startup_latency": {
+    "runs": 5,
+    "mean_ms": 345.44,
+    "median_ms": 320.38,
+    "min_ms": 304.21,
+    "max_ms": 455.51
+  },
+  "prediction_benchmark": {
+    "num_samples": 100,
+    "warmup_requests": 10,
+    "top_k": 5,
+    "pure_model_latency_ms": {
+      "mean": 2.422,
+      "median": 2.199,
+      "min": 1.798,
+      "max": 7.705,
+      "p95": 3.722,
+      "p99": 4.462,
+      "throughput_rps": 454.7
+    },
+    "e2e_http_latency_ms": {
+      "mean": 3.667,
+      "median": 3.452,
+      "min": 2.72,
+      "max": 7.133,
+      "p95": 4.779,
+      "p99": 6.099,
+      "throughput_rps": 289.7
+    }
+  },
+  "generation_benchmark": {
+    "length_10": {
+      "target_tokens": 10,
+      "mean_prompt_tokens": 6.8,
+      "median_actual_tokens": 10.0,
+      "num_samples": 20,
+      "pure_model": {
+        "median_total_ms": 34.57,
+        "mean_total_ms": 34.78,
+        "p95_total_ms": 39.03,
+        "tokens_per_second": 289.26,
+        "ms_per_token": 3.46
+      },
+      "e2e_http": {
+        "median_total_ms": 36.24,
+        "mean_total_ms": 36.6,
+        "p95_total_ms": 39.68,
+        "tokens_per_second": 275.95,
+        "ms_per_token": 3.62
+      }
+    },
+    "length_20": {
+      "target_tokens": 20,
+      "mean_prompt_tokens": 6.8,
+      "median_actual_tokens": 20.0,
+      "num_samples": 20,
+      "pure_model": {
+        "median_total_ms": 73.01,
+        "mean_total_ms": 74.25,
+        "p95_total_ms": 81.35,
+        "tokens_per_second": 273.92,
+        "ms_per_token": 3.65
+      },
+      "e2e_http": {
+        "median_total_ms": 77.15,
+        "mean_total_ms": 76.84,
+        "p95_total_ms": 84.15,
+        "tokens_per_second": 259.23,
+        "ms_per_token": 3.86
+      }
+    },
+    "length_30": {
+      "target_tokens": 30,
+      "mean_prompt_tokens": 6.8,
+      "median_actual_tokens": 30.0,
+      "num_samples": 20,
+      "pure_model": {
+        "median_total_ms": 121.63,
+        "mean_total_ms": 116.52,
+        "p95_total_ms": 126.69,
+        "tokens_per_second": 246.65,
+        "ms_per_token": 4.05
+      },
+      "e2e_http": {
+        "median_total_ms": 121.21,
+        "mean_total_ms": 122.91,
+        "p95_total_ms": 132.2,
+        "tokens_per_second": 247.51,
+        "ms_per_token": 4.04
+      }
+    },
+    "length_50": {
+      "target_tokens": 50,
+      "mean_prompt_tokens": 6.8,
+      "median_actual_tokens": 50.0,
+      "num_samples": 20,
+      "pure_model": {
+        "median_total_ms": 225.33,
+        "mean_total_ms": 224.79,
+        "p95_total_ms": 233.06,
+        "tokens_per_second": 221.89,
+        "ms_per_token": 4.51
+      },
+      "e2e_http": {
+        "median_total_ms": 232.95,
+        "mean_total_ms": 230.09,
+        "p95_total_ms": 244.97,
+        "tokens_per_second": 214.64,
+        "ms_per_token": 4.66
+      }
+    }
+  }
+}

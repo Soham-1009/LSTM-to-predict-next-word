@@ -1,0 +1,46 @@
+{
+  "experiment_name": "multidomain_v1_approach_a_word",
+  "approach": "A_word_continuation",
+  "base_checkpoint": "backend/model_artifacts/checkpoints/best_val.pt",
+  "checkpoint_dir": "experiments/multidomain_v1/checkpoints/approach_a",
+  "tokenizer_type": "word_level_30k",
+  "vocab_path": "backend/model_artifacts/tokenizer/vocab.json",
+  "model_config": {
+    "vocab_size": 30000,
+    "embed_dim": 256,
+    "hidden_dim": 512,
+    "num_layers": 2,
+    "dropout": 0.30,
+    "context_length": 35,
+    "pad_idx": 0,
+    "unk_idx": 1,
+    "bos_idx": 2,
+    "eos_idx": 3
+  },
+  "training_config": {
+    "global_effective_batch_size": 64,
+    "per_device_batch_size_ddp_2gpu": 32,
+    "per_device_batch_size_single_gpu": 64,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "initial_target_epochs": 5,
+    "max_epochs": 10,
+    "freeze_layer_1_epochs": 2,
+    "lr_scheduler": "cosine",
+    "min_lr": 0.00001,
+    "seed": 42
+  },
+  "ddp_validation": {
+    "enforce_global_batch_size": true,
+    "expected_global_batch_size": 64,
+    "notes": "When launching under torchrun with 2 GPUs (world_size=2), DataLoader per-GPU batch_size must be set to 32 to yield global_effective_batch_size=64. Setting per-GPU batch_size=64 under 2 GPUs would silently inflate global batch size to 128, altering optimization dynamics."
+  },
+  "data_paths": {
+    "train_bin": "experiments/multidomain_v1/data/processed/train.bin",
+    "val_bin": "experiments/multidomain_v1/data/processed/val.bin",
+    "test_bin": "experiments/multidomain_v1/data/processed/test.bin",
+    "metadata": "experiments/multidomain_v1/data/processed/metadata.json"
+  }
+}

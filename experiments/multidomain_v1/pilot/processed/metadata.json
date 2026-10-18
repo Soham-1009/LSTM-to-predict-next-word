@@ -1,0 +1,201 @@
+{
+  "dataset_version": "1.1.0-pilot-parent-disjoint",
+  "experiment_id": "multidomain_v1_pilot",
+  "created_at_utc": "2026-10-15T05:28:08Z",
+  "random_seed": 42,
+  "token_dtype": "uint16",
+  "vocab_size": 30000,
+  "special_token_ids": {
+    "<PAD>": 0,
+    "<UNK>": 1,
+    "<BOS>": 2,
+    "<EOS>": 3
+  },
+  "split_ratios_target": {
+    "train": 0.8,
+    "val": 0.1,
+    "test": 0.1
+  },
+  "parent_source_splitting": {
+    "enabled": true,
+    "strategy": "stratified_by_domain",
+    "total_parent_sources": 86,
+    "zero_parent_overlap_verified": true,
+    "zero_hash_overlap_verified": true,
+    "per_domain_split_coverage_verified": true
+  },
+  "statistics": {
+    "raw_document_count": 129,
+    "rejected_document_count": 1,
+    "duplicate_document_count": 2,
+    "unique_document_count": 126,
+    "total_parent_sources": 86,
+    "train": {
+      "parents": 64,
+      "documents": 90,
+      "tokens": 82134,
+      "bytes": 164268,
+      "offsets_count": 91,
+      "sha256": "06b1b38f53cbdeb9b5f05dba0547b1e62f9eef6abe7af596ff2dfc3772213109"
+    },
+    "val": {
+      "parents": 11,
+      "documents": 19,
+      "tokens": 20354,
+      "bytes": 40708,
+      "offsets_count": 20,
+      "sha256": "cdcd6ad7983bb6df0a96e5a7385058e39784e50a56bf3f587178432b64e704d9"
+    },
+    "test": {
+      "parents": 11,
+      "documents": 17,
+      "tokens": 21495,
+      "bytes": 42990,
+      "offsets_count": 18,
+      "sha256": "873f9593293c1667dd94f9de07177bab0b10ac704a63aa685f64ddd225940288"
+    },
+    "total_tokens": 123983
+  },
+  "domain_breakdown": {
+    "conversation": {
+      "parent_sources": {
+        "train": 2,
+        "val": 1,
+        "test": 1,
+        "total": 4
+      },
+      "documents": {
+        "train": 6,
+        "val": 3,
+        "test": 3,
+        "total": 12
+      },
+      "tokens": {
+        "train": 4750,
+        "val": 2468,
+        "test": 2455,
+        "total": 9673
+      },
+      "unk_tokens": 632,
+      "oov_rate_pct": 6.53
+    },
+    "literature": {
+      "parent_sources": {
+        "train": 3,
+        "val": 1,
+        "test": 1,
+        "total": 5
+      },
+      "documents": {
+        "train": 9,
+        "val": 3,
+        "test": 1,
+        "total": 13
+      },
+      "tokens": {
+        "train": 17626,
+        "val": 5787,
+        "test": 2613,
+        "total": 26026
+      },
+      "unk_tokens": 974,
+      "oov_rate_pct": 3.74
+    },
+    "news": {
+      "parent_sources": {
+        "train": 40,
+        "val": 5,
+        "test": 5,
+        "total": 50
+      },
+      "documents": {
+        "train": 40,
+        "val": 5,
+        "test": 5,
+        "total": 50
+      },
+      "tokens": {
+        "train": 7910,
+        "val": 1599,
+        "test": 853,
+        "total": 10362
+      },
+      "unk_tokens": 764,
+      "oov_rate_pct": 7.37
+    },
+    "scientific": {
+      "parent_sources": {
+        "train": 4,
+        "val": 1,
+        "test": 1,
+        "total": 6
+      },
+      "documents": {
+        "train": 12,
+        "val": 3,
+        "test": 3,
+        "total": 18
+      },
+      "tokens": {
+        "train": 6895,
+        "val": 2007,
+        "test": 1946,
+        "total": 10848
+      },
+      "unk_tokens": 809,
+      "oov_rate_pct": 7.46
+    },
+    "technical_docs": {
+      "parent_sources": {
+        "train": 4,
+        "val": 1,
+        "test": 1,
+        "total": 6
+      },
+      "documents": {
+        "train": 12,
+        "val": 3,
+        "test": 3,
+        "total": 18
+      },
+      "tokens": {
+        "train": 18726,
+        "val": 3715,
+        "test": 8990,
+        "total": 31431
+      },
+      "unk_tokens": 1880,
+      "oov_rate_pct": 5.98
+    },
+    "wikitext103_replay": {
+      "parent_sources": {
+        "train": 11,
+        "val": 2,
+        "test": 2,
+        "total": 15
+      },
+      "documents": {
+        "train": 11,
+        "val": 2,
+        "test": 2,
+        "total": 15
+      },
+      "tokens": {
+        "train": 26227,
+        "val": 4778,
+        "test": 4638,
+        "total": 35643
+      },
+      "unk_tokens": 1309,
+      "oov_rate_pct": 3.67
+    }
+  },
+  "file_checksums": {
+    "train.bin": "06b1b38f53cbdeb9b5f05dba0547b1e62f9eef6abe7af596ff2dfc3772213109",
+    "train_offsets.bin": "f70b331763f8b4b58dd8fb4bb285d8e18ba929a81df5a5c7c163176f5dac5d0e",
+    "val.bin": "cdcd6ad7983bb6df0a96e5a7385058e39784e50a56bf3f587178432b64e704d9",
+    "val_offsets.bin": "719e91883ff7864fc59f0a62b6c2a33099b406f45e5f81645f4586ad9d13ead9",
+    "test.bin": "873f9593293c1667dd94f9de07177bab0b10ac704a63aa685f64ddd225940288",
+    "test_offsets.bin": "ddfb71e8761bf3aa7ca184bd6be7bc95df2d11438dc934d6518a3085d9b2a850"
+  }
+}

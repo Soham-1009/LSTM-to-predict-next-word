@@ -1,0 +1,46 @@
+{
+  "experiment_name": "multidomain_v1_approach_b_bpe",
+  "approach": "B_subword_bpe",
+  "base_checkpoint": null,
+  "checkpoint_dir": "experiments/multidomain_v1/checkpoints/approach_b",
+  "tokenizer_type": "byte_level_bpe_16k",
+  "tokenizer_save_dir": "experiments/multidomain_v1/tokenizer_bpe_16k",
+  "model_config": {
+    "vocab_size": 16384,
+    "embed_dim": 256,
+    "hidden_dim": 512,
+    "num_layers": 2,
+    "dropout": 0.30,
+    "context_length": 35,
+    "pad_idx": 0,
+    "unk_idx": 1,
+    "bos_idx": 2,
+    "eos_idx": 3
+  },
+  "training_config": {
+    "batch_size": 64,
+    "global_effective_batch_size": 64,
+    "per_device_batch_size_ddp_2gpu": 32,
+    "per_device_batch_size_single_gpu": 64,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "epochs": 30,
+    "warmup_epochs": 2,
+    "lr_scheduler": "cosine",
+    "min_lr": 0.00001,
+    "seed": 42
+  },
+  "ddp_validation": {
+    "enforce_global_batch_size": true,
+    "expected_global_batch_size": 64,
+    "notes": "When launching under torchrun with 2 GPUs (world_size=2), DataLoader per-GPU batch_size must be set to 32 to yield global_effective_batch_size=64. For single-GPU execution (e.g. local RTX 3050), DataLoader batch_size is set directly to 64 to preserve identical optimization dynamics."
+  },
+  "data_paths": {
+    "train_bin": "experiments/multidomain_v1/data/processed_bpe/train.bin",
+    "val_bin": "experiments/multidomain_v1/data/processed_bpe/val.bin",
+    "test_bin": "experiments/multidomain_v1/data/processed_bpe/test.bin",
+    "metadata": "experiments/multidomain_v1/data/processed_bpe/metadata.json"
+  }
+}
