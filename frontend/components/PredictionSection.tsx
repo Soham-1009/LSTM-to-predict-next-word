@@ -40,7 +40,12 @@ export default function PredictionSection({
         onSuccess(inputText, `Top predictions: [${topTokens}]`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Prediction failed");
+      const msg = err instanceof Error ? err.message : "Prediction failed";
+      if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("fetch")) {
+        setError("Backend not connected. Start FastAPI locally ('uvicorn backend.app.main:app') or click the badge in the top right to configure your backend URL.");
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }

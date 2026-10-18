@@ -50,7 +50,12 @@ export default function GenerationSection({
         onSuccess(prompt, response.generated_text);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Generation failed");
+      const msg = err instanceof Error ? err.message : "Generation failed";
+      if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("fetch")) {
+        setError("Backend not connected. Start FastAPI locally ('uvicorn backend.app.main:app') or click the badge in the top right to configure your backend URL.");
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
