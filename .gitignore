@@ -83,9 +83,8 @@ kaggle_*
 .ipynb_checkpoints/
 
 # ------------------------------------------------------------------------------
-# 4. Model Weights & Large Checkpoints
+# 4. Model Weights & Large Checkpoints (Track primary inference models via Git LFS)
 # ------------------------------------------------------------------------------
-# Raw binary model weights (distributed separately or generated during training)
 *.pt
 *.pth
 *.bin
@@ -99,30 +98,40 @@ backend/model/checkpoints/*
 !backend/model/checkpoints/.gitkeep
 backend/model/weights/*
 !backend/model/weights/.gitkeep
-backend/model_artifacts/checkpoints/*
-!backend/model_artifacts/checkpoints/.gitkeep
 backend/model_artifacts/config/*
 !backend/model_artifacts/config/.gitkeep
 
-# Tokenizer artifacts: ignore raw artifacts but preserve vocabulary
+# Checkpoints: allow primary inference models via Git LFS (exclude training continuation latest.pt)
+backend/model_artifacts/checkpoints/*
+!backend/model_artifacts/checkpoints/.gitkeep
+!backend/model_artifacts/checkpoints/best_val.pt
+!experiments/multidomain_v1/checkpoints/multidomain_adapted.pt
+backend/model_artifacts/checkpoints/latest.pt
+
+# Tokenizer artifacts: preserve vocabulary
 backend/model_artifacts/tokenizer/*
 !backend/model_artifacts/tokenizer/.gitkeep
 !backend/model_artifacts/tokenizer/vocab.json
 
 # ------------------------------------------------------------------------------
-# 5. Datasets (Raw, Processed corpora, data directories, & dataset spec)
+# 5. Datasets (Exclude massive 517 MB raw text & 170 MB train set; track eval sets)
 # ------------------------------------------------------------------------------
 dataset/
-datasets/
 data/
 **/dataset/
-**/datasets/
 **/data/
-dataset.md
 backend/datasets/raw/*
 !backend/datasets/raw/.gitkeep
+!backend/datasets/raw/sample_corpus.txt
+backend/datasets/raw/wikitext-103.txt
 backend/datasets/processed/*
 !backend/datasets/processed/.gitkeep
+!backend/datasets/processed/metadata.json
+!backend/datasets/processed/val.bin
+!backend/datasets/processed/test.bin
+!backend/datasets/processed/offsets/*
+!experiments/multidomain_v1/pilot/processed/*
+backend/datasets/processed/train.bin
 
 # ------------------------------------------------------------------------------
 # 6. Node.js & Next.js Frontend

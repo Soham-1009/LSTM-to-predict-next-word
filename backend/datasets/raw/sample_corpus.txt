@@ -1,0 +1,45 @@
+An artificial neural network is an interconnected group of nodes, inspired by a simplification of neurons in a brain. Each node represents an artificial neuron which can process inputs and forward signals to other nodes. Neurons compute an activation function applied to a weighted sum of inputs.
+
+<|endoftext|>
+
+A statistical language model is a probability distribution over sequences of words. Given such a sequence of length m, it assigns a probability to the whole sequence. Causal language models compute the probability of the next word given all previous context words.
+
+<|endoftext|>
+
+A recurrent neural network is a class of artificial neural networks where connections between nodes can create a cycle, allowing output from some nodes to affect subsequent input to the same nodes. This allows it to exhibit temporal dynamic behavior.
+
+<|endoftext|>
+
+Long short-term memory is an artificial neural network architecture used in the fields of artificial intelligence and deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections, enabling it to process entire sequences of data.
+
+<|endoftext|>
+
+Natural language processing is an interdisciplinary subfield of computer science and linguistics. It is primarily concerned with giving computers the ability to support and manipulate human language.
+
+<|endoftext|>
+
+Generative artificial intelligence is artificial intelligence capable of generating text, images, videos, or other data using generative models, often in response to prompts. Generative AI models learn the patterns and structure of their input training data.
+
+<|endoftext|>
+
+Optimization in deep learning refers to the process of adjusting model parameters to minimize a loss function. Stochastic gradient descent and its variants like Adam and AdamW are commonly employed to update model weights efficiently across mini-batches.
+
+<|endoftext|>
+
+Evaluation of causal language models relies on metrics like cross-entropy loss, perplexity, and Top-K accuracy. Lower perplexity indicates that the model is more confident and accurate in its next-word predictions on held-out test data.
+
+<|endoftext|>
+
+An artificial neural network is an interconnected group of nodes, inspired by a simplification of neurons in a brain. Each node represents an artificial neuron which can process inputs and forward signals to other nodes. Neurons compute an activation function applied to a weighted sum of inputs.
+
+<|endoftext|>
+
+Long short-term memory is an artificial neural network architecture used in the fields of artificial intelligence and deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections, enabling it to process entire sequences of data.
+
+<|endoftext|>
+
+Tokenization is the process of breaking a stream of text up into words, phrases, symbols, or other meaningful elements called tokens. The list of tokens becomes input for further processing such as parsing or text mining.
+
+<|endoftext|>
+
+Autoregressive generation generates tokens one at a time, appending each sampled token back to the input context. Sampling techniques such as greedy decoding, temperature scaling, and nucleus top-p sampling balance coherence and diversity.

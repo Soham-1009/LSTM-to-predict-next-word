@@ -1,0 +1,49 @@
+{
+  "dataset_version": "1.0.0",
+  "source_info": "english_corpus",
+  "created_at_utc": "2026-09-21T13:28:06.061702+00:00",
+  "random_seed": 42,
+  "token_dtype": "uint16",
+  "vocab_size": 30000,
+  "special_token_ids": {
+    "<PAD>": 0,
+    "<UNK>": 1,
+    "<BOS>": 2,
+    "<EOS>": 3
+  },
+  "split_ratios": {
+    "train": 0.85,
+    "val": 0.075,
+    "test": 0.075
+  },
+  "statistics": {
+    "raw_size_bytes": 542479871,
+    "raw_document_count": 29595,
+    "unique_document_count": 28906,
+    "duplicate_document_count": 689,
+    "train": {
+      "documents": 24570,
+      "tokens": 89152843,
+      "bytes": 178305686
+    },
+    "val": {
+      "documents": 2167,
+      "tokens": 7953275,
+      "bytes": 15906550
+    },
+    "test": {
+      "documents": 2169,
+      "tokens": 7971938,
+      "bytes": 15943876
+    },
+    "total_tokens": 105078056
+  },
+  "file_checksums": {
+    "train.bin": "d82918d8664ae4585b434012f604f89c37e3fc850bbaa39594ca212bfbaabb23",
+    "train_offsets.bin": "277f8bd0cf6a000531d277b98e881823161f0b5757fd5f06462a26ab31a7dcab",
+    "val.bin": "257605ed5749a9f08faefa847ff8804f3032cd74bf2efa87ea84883a85755604",
+    "val_offsets.bin": "c5790a487673db7696d5ec3925bb3f702684f400e3486958a1b023d86c0148db",
+    "test.bin": "1672e8ad656257489652bca6cc8784c9a9995c8685793e82e31a9528f87083c2",
+    "test_offsets.bin": "6af1da244f004cacd68808768c623e0f4a685d4823b5366e2cb879e7d3cf2462"
+  }
+}
