@@ -2,10 +2,10 @@
 
 **Project Title:** LSTM Next-Word Prediction & Text Generation System  
 **Primary Archive File:** `release/GenAI_LSTM_Final_Submission.zip`  
-**Total Packaged Files:** 102 files  
-**Total Uncompressed Size:** 409.99 MB (429,910,758 bytes)  
-**Archive Size (Compressed):** 378.74 MB (397,134,011 bytes)  
-**Package SHA-256:** `4d04f647f4e5ccb74fca14b97b3b1363671edad7f43752e135c0476998152b3e`  
+**Total Packaged Files:** 104 files  
+**Total Uncompressed Size:** 410.12 MB (430,046,723 bytes)  
+**Archive Size (Compressed):** 379.15 MB (397,563,120 bytes)  
+**Package SHA-256:** `fcc02d5ac18d17c41cfcc6198d2b5a3363f1ea8f24c9dd5bc8cfa90def1aca5b`  
 **Standalone Run-Readiness:** **YES — Out-of-the-Box Runnable for Inference & Evaluation**  
 
 ---
@@ -59,11 +59,12 @@ The submission ZIP contains all clean source code, configurations, evaluation da
 
 | Relative File Path | Size (Bytes) | SHA-256 Checksum |
 | :--- | :---: | :--- |
-| `.gitignore` | 1,176 | `d151654190e31c70b50ff29995a8dd2c7cfb8d34781bf784cbeb5641245e7bd1` |
+| `.github/workflows/deploy-pages.yml` | 943 | `b4c4062af23537e28a09919fe3c4289fe4f24509ac07978216300e02fffe3a63` |
+| `.gitignore` | 3,811 | `f15e20d42a871b534af9df6b992525704603faf76381ef14e3bb2b61b030b212` |
 | `architecture.md` | 3,631 | `83a28f7a72a729bb99b26d4b2616bc6aeefcb3ebe28cb71d896b67b187ec3293` |
 | `backend/__init__.py` | 29 | `ac4124b232f0a58d0bdbc19c584e010e9f29683eca6dcdc6053003f9e28d113f` |
 | `backend/app/__init__.py` | 35 | `45390889d8a4a81a685fa8f8fb38422e5f6ff8840d7df1405f088ab5347ae8e2` |
-| `backend/app/main.py` | 16,533 | `0001f44f54f2812d8f258648375f07e33c8502c415bde363bec5af9a267e22eb` |
+| `backend/app/main.py` | 16,399 | `ffde0091a68dcb9987993719154ef8ca51f7f99c8e13e660fa4da4581f08ed5e` |
 | `backend/app/schemas.py` | 2,171 | `28a7299eea13bafe844e8f213d1edb5702b690766843daa1eeb21d7b43ccaa56` |
 | `backend/datasets/processed/.gitkeep` | 52 | `b30d90044dae297b8bb3af0f305c930c16bbad58117f16e6d30fc0ef131f5118` |
 | `backend/datasets/processed/metadata.json` | 1,449 | `d5786a6c00944fc264150085065ead4c1838871448f91c49d4fbeaf3cd2cee20` |
@@ -129,26 +130,26 @@ The submission ZIP contains all clean source code, configurations, evaluation da
 | `experiments/multidomain_v1/pilot/REAL_DATA_PILOT_REPORT.md` | 38,547 | `58a7b0f913c4b9c3fbdbe70c6a1984a0b856a7bcc3afd95cb272122f3b7fd702` |
 | `experiments/multidomain_v1/validate_evaluation_plan.py` | 5,496 | `56d80737c68394c8c3aa56238f8a1be158203255f508d9767f04123ddbdb4da4` |
 | `frontend/.gitignore` | 480 | `207e265ff4901f9ad9f96d8ce08530e04f9fc600815472a66d0a446096d654cd` |
-| `frontend/AGENTS.md` | 678 | `63f2c50380ed6303237cce215ce27af1d620d094c215e28d1b1538a3c070e3bb` |
 | `frontend/app/favicon.ico` | 25,931 | `2b8ad2d33455a8f736fc3a8ebf8f0bdea8848ad4c0db48a2833bd0f9cd775932` |
 | `frontend/app/globals.css` | 577 | `26944526ba56cdcf9a091c799f21314339f3b6f6bcaffa9d82ee4696699a0320` |
-| `frontend/app/layout.tsx` | 695 | `a51729a7f5c195acfc07d70322bf11cddb0b66f3e0b6b9c6103ea3d614bc87ba` |
+| `frontend/app/layout.tsx` | 800 | `28245acb0a3e51a2a2f19c9cb6d8c5f9f2f06d832e2c1c78e22e7b56545cc60c` |
 | `frontend/app/page.tsx` | 6,765 | `98c439416b79ddbf3415fbefbe51fa033be5e7be97f7e14eb290931e557d0a0b` |
-| `frontend/CLAUDE.md` | 11 | `336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49` |
 | `frontend/components/GeneralizationSection.tsx` | 31,033 | `3ce43f5a1731491223f2d6f8411405e6f4c46971bcd2149246a997daf985b112` |
-| `frontend/components/GenerationSection.tsx` | 10,248 | `e11e42e62853865f13da130b6aef8cac11052592be47a3faba07586e17d3865d` |
+| `frontend/components/GenerationSection.tsx` | 10,564 | `16eb08e364f376e76aaec3803fbd22cfd49093ae32520781420dd5f3a9cd90c7` |
 | `frontend/components/HistoryPanel.tsx` | 4,062 | `10e2e70bdf4539120854c3bebbd71ea42f42092c05332d3e54cfbf236c6d21e8` |
 | `frontend/components/HowItWorks.tsx` | 5,003 | `9cde44000235bd37c2d5f98f2d0f464ea4a69139db6d3faabb2d82b8deda12cf` |
-| `frontend/components/ModelInfoBadge.tsx` | 3,309 | `f7595bf7ce58bf3e6459ba9b67686af220cf61d0e0c066b8ecae733dad978fca` |
-| `frontend/components/PredictionSection.tsx` | 7,858 | `4530ebbe52675b86bed53c4c924064f23fb039cd3f5211060b32c7ec90c73bbf` |
+| `frontend/components/ModelInfoBadge.tsx` | 7,802 | `df4563f01cc60e9cdbc3a2272345e82efabef85378b7ad94186b801b5ca6a7ef` |
+| `frontend/components/PredictionSection.tsx` | 8,174 | `05b0f026f54e186e3e89e0e9fc0bde20fb54cdea63d316d9b190d70f668065c0` |
 | `frontend/components/ThemeToggle.tsx` | 2,974 | `4feb46cd49eb906981db07ae3fa5543c0de27141197001df9462d762ef35fcc1` |
 | `frontend/eslint.config.mjs` | 465 | `870f1adccecf3051cbcd9fd307cef51d7633cf510979c181a81f4b1797273493` |
-| `frontend/lib/api.ts` | 7,245 | `be60dc0482d43409ad0a894243604b395ca4dd6f680bba6588058ab8a4aaec62` |
-| `frontend/next-env.d.ts` | 296 | `0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc` |
-| `frontend/next.config.ts` | 129 | `f1971e276440f17f7fbd1e3f0c0a297b3632783f30a14a10f1010779b5afd2fe` |
+| `frontend/lib/api.ts` | 13,863 | `c4e666e18ae72c40762f86a5314399c2c2b63d424f469c60e3d84ea6395fd78a` |
+| `frontend/next-env.d.ts` | 288 | `1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b` |
+| `frontend/next.config.ts` | 414 | `5deb6dceafca46ff55f4464a8b390ab93e7e5b3fd503d842b8cab6dde6938562` |
 | `frontend/package-lock.json` | 236,690 | `4a0938421c13383fce13796d7d75011f4b784e2fa9d5310bea82423618a69028` |
 | `frontend/package.json` | 579 | `237812aba3c1b466247e16dbf09a3a077156b43639f126aaff16298049fb0485` |
 | `frontend/postcss.config.mjs` | 94 | `dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde` |
+| `frontend/public/.nojekyll` | 44 | `4aa4911384ec09134c295861c578864ce6eb62f041e9f7a20d07c9a482516080` |
+| `frontend/public/benchmark/generalization_comparison.json` | 17,163 | `13084ff88d51220e2d7db033b202bb26bcb49559fa6fda24bed95dcee290cabd` |
 | `frontend/public/file.svg` | 391 | `2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4` |
 | `frontend/public/globe.svg` | 1,035 | `b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf` |
 | `frontend/public/next.svg` | 1,375 | `55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc` |
@@ -156,7 +157,8 @@ The submission ZIP contains all clean source code, configurations, evaluation da
 | `frontend/public/window.svg` | 385 | `644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1` |
 | `frontend/README.md` | 1,450 | `60b55ff7df79af72590f9524208e46642bc32bdc175cdad41349681c0e2f958f` |
 | `frontend/tests/smoke.test.mjs` | 10,172 | `c094ceeb99d72bc1d9811753e7df77939c8c8b8d6622db850dcdae63050dd139` |
-| `frontend/tsconfig.json` | 666 | `be18523b23b78b6e1a876ddd107d330f0168bddf09d751b57e0b5edce69c66f3` |
+| `frontend/tsconfig.json` | 640 | `def41017f8340c21e5ad6ab77b7243435a63b05bc25ae5b44555c9062ae5f370` |
+| `frontend/tsconfig.tsbuildinfo` | 103,904 | `daff9b66e6fb91a99aff403b89fe717e46704d66f4c3eeb1f447c2f9766f719a` |
 | `PRD.md` | 3,334 | `befb5ac328e14d0a152e0c9ece556e182ff9bcaf5c0b7c0f4f25b76c90b33415` |
 | `README.md` | 20,347 | `b59437b33ce56d6bf8663b83532ad2234835f984379f67050db338a02a1e98be` |
 | `scripts/package_release.py` | 10,184 | `d1fbdbd8edf559b05f80a720d5c5174a1b3d893d31e97b6f3e9d37efa5d90a22` |
