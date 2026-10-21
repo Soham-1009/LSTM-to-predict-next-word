@@ -114,7 +114,7 @@ backend/model_artifacts/tokenizer/*
 !backend/model_artifacts/tokenizer/vocab.json
 
 # ------------------------------------------------------------------------------
-# 5. Datasets (Exclude massive 517 MB raw text & 170 MB train set; track eval sets)
+# 5. Datasets (Exclude massive 517 MB raw text corpus; track processed train/val/test & offsets)
 # ------------------------------------------------------------------------------
 dataset/
 data/
@@ -127,11 +127,12 @@ backend/datasets/raw/wikitext-103.txt
 backend/datasets/processed/*
 !backend/datasets/processed/.gitkeep
 !backend/datasets/processed/metadata.json
+!backend/datasets/processed/train.bin
 !backend/datasets/processed/val.bin
 !backend/datasets/processed/test.bin
+!backend/datasets/processed/offsets/
 !backend/datasets/processed/offsets/*
 !experiments/multidomain_v1/pilot/processed/*
-backend/datasets/processed/train.bin
 
 # ------------------------------------------------------------------------------
 # 6. Node.js & Next.js Frontend
