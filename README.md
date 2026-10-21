@@ -9,8 +9,8 @@ A complete Generative AI project implementing a custom PyTorch LSTM language mod
 ## Abstract
 
 This project demonstrates the design, end-to-end training, rigorous held-out evaluation, and deployment of a causal recurrent language model. Utilizing an LSTM architecture with 26.75 million parameters across 2 recurrent layers and a 30,000-token vocabulary, the system learns statistical language distributions to perform:
-1. **Interactive Autocomplete:** Rapid next-word prediction computing Top-$K$ ranked probability distributions.
-2. **Controlled Autoregressive Generation:** Sequence continuation with temperature scaling, Top-$K$ truncation, and nucleus (Top-$P$) sampling.
+1. **Interactive Autocomplete:** Rapid next-word prediction computing Top-K ranked probability distributions.
+2. **Controlled Autoregressive Generation:** Sequence continuation with temperature scaling, Top-K truncation, and nucleus (Top-P) sampling.
 The system is served via a lightweight FastAPI backend connected to an interactive Next.js 16 / React 19 web frontend with live CUDA telemetry.
 
 ---
@@ -20,9 +20,9 @@ The system is served via a lightweight FastAPI backend connected to an interacti
 - **Primary Feature — Interactive Autocomplete:** Given an input prompt, the model tokenizes the sequence, runs a forward pass through the causal LSTM, and computes a ranked distribution over candidate next words with confidence scores. Clicking any candidate appends it to the active text.
 - **Secondary Feature — Autoregressive Text Generation:** The model recursively generates sequence continuations step-by-step using configurable sampling controls:
   - **Greedy Decoding:** Deterministic argmax selection.
-  - **Temperature Scaling ($0.0 - 2.0$):** Flattens or sharpens token probabilities.
-  - **Top-K Filtering:** Restricts candidate selection to the top $K$ highest-probability tokens.
-  - **Nucleus (Top-P) Filtering:** Dynamically restricts sampling to the minimal set of tokens whose cumulative probability exceeds threshold $P$.
+  - **Temperature Scaling (0.0–2.0):** Flattens or sharpens token probabilities.
+  - **Top-K Filtering:** Restricts candidate selection to the top K highest-probability tokens.
+  - **Nucleus (Top-P) Filtering:** Dynamically restricts sampling to the minimal set of tokens whose cumulative probability exceeds threshold P.
 - **Tertiary Feature — Empirical Multi-Domain Evaluation & Dynamic Model Switching:** A dedicated interactive UI tab displays measured per-domain cross-entropy loss, perplexity, Top-1/Top-5 accuracy, OOV rates, and side-by-side prompt generations. Allows instant runtime model hot-swapping between the frozen baseline (`best_val.pt`) and adapted multi-domain weights (`multidomain_adapted.pt`).
 - **Real-Time Hardware & Model Telemetry:** The Next.js interface continuously monitors the FastAPI backend, displaying active device status (`CUDA` or `CPU`), vocabulary size (30,000), active checkpoint name, and architecture details.
 
@@ -35,10 +35,10 @@ The network is implemented in PyTorch (`backend/model/lstm.py`):
 | Parameter | Specification |
 | :--- | :--- |
 | **Model Type** | Causal Recurrent Language Model (`LSTMLanguageModel`) |
-| **Vocabulary Size ($V$)** | 30,000 tokens |
-| **Context Length ($T$)** | 35 tokens |
-| **Embedding Dimension ($D_{emb}$)** | 256 |
-| **Hidden Units ($D_{hid}$)** | 512 |
+| **Vocabulary Size (V)** | 30,000 tokens |
+| **Context Length (T)** | 35 tokens |
+| **Embedding Dimension (D_emb)** | 256 |
+| **Hidden Units (D_hid)** | 512 |
 | **LSTM Layers** | 2 stacked recurrent layers |
 | **Inter-Layer Dropout** | 0.30 |
 | **Total Parameters** | **26,748,208** trainable parameters |
@@ -74,12 +74,12 @@ To evaluate whether the LSTM generalizes beyond its initial Wikipedia training c
 ### 4.1 Data Leakage Prevention & Audit
 - **Parent Source Disjointness:** Training, validation, and testing sets use strictly disjoint author and parent sources (0.0% overlap).
 - **Near-Duplicate Check:** Exact-match and whitespace-normalized SHA-256 hash overlap is **0.0%**.
-- **Document Boundary Invariant:** Causal sliding window sequences are constructed strictly within each document using contiguous document offset tables; zero sequences cross document boundaries. The sum of evaluated targets per domain exactly equals the multi-domain overall total ($2,380 + 2,590 + 770 + 1,925 + 8,960 + 4,585 = 21,210$ targets, $606 \text{ sequences} \times 35$).
+- **Document Boundary Invariant:** Causal sliding window sequences are constructed strictly within each document using contiguous document offset tables; zero sequences cross document boundaries. The sum of evaluated targets per domain exactly equals the multi-domain overall total (2,380 + 2,590 + 770 + 1,925 + 8,960 + 4,585 = 21,210 targets, 606 sequences × 35).
 - **Audit Verification:** Verified by `experiments/multidomain_v1/pilot/audit_pilot.py` (11/11 mathematical invariants verified: `AUDIT_PASSED`).
 
 ### 4.2 Empirical Pilot Benchmark: Frozen Baseline vs Adapted Model
 
-A controlled domain adaptation experiment was executed (`backend/training/train_generalization.py`), fine-tuning from `best_val.pt` for 5 epochs using AdamW ($LR=1\times 10^{-4}$, weight decay 0.01, gradient clipping 1.0) on the multi-domain training split (90 documents, 82,134 tokens) and selecting checkpoints on the validation split (19 documents, 20,354 tokens), while **preserving the exact 30,000-token vocabulary and architecture**. The held-out test split was kept strictly isolated until evaluation.
+A controlled domain adaptation experiment was executed (`backend/training/train_generalization.py`), fine-tuning from `best_val.pt` for 5 epochs using AdamW (LR = 1 × 10⁻⁴, weight decay 0.01, gradient clipping 1.0) on the multi-domain training split (90 documents, 82,134 tokens) and selecting checkpoints on the validation split (19 documents, 20,354 tokens), while **preserving the exact 30,000-token vocabulary and architecture**. The held-out test split was kept strictly isolated until evaluation.
 
 Both **token-weighted aggregate** and **equal-weight macro-average** metrics are reported:
 
@@ -101,28 +101,28 @@ To ensure scientific reproducibility and avoid conflating different evaluation s
 
 1. **Full WikiText-103 Held-Out Test Split (`test_evaluation_epoch46.json`):**
    - **Scope:** Complete official test partition (`backend/datasets/processed/test.bin`).
-   - **Scale:** 2,169 Wikipedia articles, 7,971,938 total tokens, **7,932,190 evaluated sequence targets** ($226,634 \times 35$).
+   - **Scale:** 2,169 Wikipedia articles, 7,971,938 total tokens, **7,932,190 evaluated sequence targets** (226,634 × 35).
    - **Baseline Metrics:** Loss: **3.9174** | Perplexity: **50.27** | Top-1: **32.43%** | Top-5: **53.97%**.
    - **Role:** Authoritative standalone evaluation of the frozen baseline (`best_val.pt`). Never combined into a before-and-after comparison against the pilot.
 
 2. **WikiText-103 Retention Slice (`generalization_comparison.json`):**
-   - **Scope:** First 22 articles of the test split (`backend/datasets/processed/offsets/test_offsets.bin`), evaluating **100,380 target tokens** ($2,868 \times 35$).
-   - **Metrics:** Baseline Loss: **3.9302** (PPL 50.92) vs. Adapted Loss: **3.9760** (PPL 53.30), $\Delta = +0.0458$.
-   - **Role:** Evaluates retention trade-offs on the original source domain. Rather than claiming "zero forgetting", the $+0.0458$ loss increase ($+2.38$ PPL, $-0.50\%$ Top-1) is disclosed as an empirical **measured regression** resulting from adaptation toward out-of-domain patterns (stability-plasticity trade-off).
+   - **Scope:** First 22 articles of the test split (`backend/datasets/processed/offsets/test_offsets.bin`), evaluating **100,380 target tokens** (2,868 × 35).
+   - **Metrics:** Baseline Loss: **3.9302** (PPL 50.92) vs. Adapted Loss: **3.9760** (PPL 53.30), Δ = +0.0458.
+   - **Role:** Evaluates retention trade-offs on the original source domain. Rather than claiming "zero forgetting", the +0.0458 loss increase (+2.38 PPL, −0.50% Top-1) is disclosed as an empirical **measured regression** resulting from adaptation toward out-of-domain patterns (stability-plasticity trade-off).
 
 3. **Multi-Domain Pilot `wikitext103_replay`:**
    - **Scope:** Exactly 2 held-out Wikipedia articles included in the 17-document pilot benchmark (4,585 target tokens).
-   - **Metrics:** Baseline Loss: **3.8893** (PPL 48.88) vs. Adapted Loss: **3.9221** (PPL 50.51), $\Delta = +0.0328$ ($+1.63$ PPL, $-0.11\%$ Top-1).
+   - **Metrics:** Baseline Loss: **3.8893** (PPL 48.88) vs. Adapted Loss: **3.9221** (PPL 50.51), Δ = +0.0328 (+1.63 PPL, −0.11% Top-1).
    - **Role:** Direct in-domain reference evaluated under identical pilot benchmark conditions alongside the other 5 domains.
 
 ### 4.4 Scope of Pilot Benchmark & Limitations of Word-Level Language Modeling
 
 - **Pilot Benchmark Scope:** The 17-document evaluation confirms domain adaptability on the sampled text distributions. It demonstrates that the LSTM can adapt to colloquial, narrative, and technical patterns, but does **not** support a claim of universal, open-ended generalization across all human language.
-- **Measured Regressions:** Model fine-tuning is not universally monotonic. In addition to the $+0.0458$ loss regression on the WikiText retention slice and $+0.0328$ on `wikitext103_replay`, the Scientific domain exhibited a slight measured regression in Top-1 accuracy ($24.05\% \to 23.84\%$, $-0.21\%$) despite perplexity improving ($119.49 \to 109.81$).
+- **Measured Regressions:** Model fine-tuning is not universally monotonic. In addition to the +0.0458 loss regression on the WikiText retention slice and +0.0328 on `wikitext103_replay`, the Scientific domain exhibited a slight measured regression in Top-1 accuracy (24.05% → 23.84%, −0.21%) despite perplexity improving (119.49 → 109.81).
 - **Out-Of-Vocabulary (OOV) Rate:** A fixed 30,000 word-level vocabulary maps unseen words (named entities, technical identifiers, medical terms) to `<unk>`. In News (6.68% OOV) and Technical Docs (5.41% OOV), this places an architectural upper bound on next-word accuracy.
 - **Top-1 vs Top-5 Accuracy:** In natural language, multiple candidate continuations are grammatically valid. Top-1 penalizes equally valid synonyms; Top-5 (57.11% on the adapted model) provides a more realistic measure of sequence comprehension.
-- **Perplexity Interpretation:** Perplexity ($\exp(\text{loss})$) is strictly vocabulary-dependent ($V=30,000$) and cannot be directly compared against byte-level or subword models.
-- **Macro vs Token-Weighted Interpretation:** The token-weighted aggregate shows a $35.5\%$ perplexity reduction ($62.56 \to 40.37$) because technical documentation accounts for $42.2\%$ of the pilot test targets. The equal-weight macro-average treats all 6 domains equally and shows a $19.3\%$ perplexity reduction ($117.98 \to 95.19$), confirming genuine cross-domain benefit independent of corpus size imbalance.
+- **Perplexity Interpretation:** Perplexity (exp(loss)) is strictly vocabulary-dependent (V = 30,000) and cannot be directly compared against byte-level or subword models.
+- **Macro vs Token-Weighted Interpretation:** The token-weighted aggregate shows a 35.5% perplexity reduction (62.56 → 40.37) because technical documentation accounts for 42.2% of the pilot test targets. The equal-weight macro-average treats all 6 domains equally and shows a 19.3% perplexity reduction (117.98 → 95.19), confirming genuine cross-domain benefit independent of corpus size imbalance.
 
 ### 4.5 Commands to Reproduce Pilot Benchmark
 
@@ -147,7 +147,7 @@ backend\.venv\Scripts\python.exe backend/training/generate_comparison_report.py
 
 ## 5. Hardware Requirements
 
-- **Inference GPU:** NVIDIA GeForce RTX 3050 Laptop GPU (or any CUDA-compatible GPU with $\ge 2$ GB VRAM).
+- **Inference GPU:** NVIDIA GeForce RTX 3050 Laptop GPU (or any CUDA-compatible GPU with ≥2 GB VRAM).
 - **CPU Fallback:** Fully supported on standard x86_64 / ARM CPUs using PyTorch CPU tensors.
 - **Host RAM:** Minimum 4 GB RAM.
 - **Disk Space:** ~1.5 GB for project files, virtual environment, and 306 MB model weights.

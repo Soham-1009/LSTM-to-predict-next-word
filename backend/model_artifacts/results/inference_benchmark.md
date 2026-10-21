@@ -56,5 +56,5 @@ Evaluates autoregressive text generation loops across varied token length target
 ## 5. Architectural Findings & Key Observations
 
 1. **Sub-3ms Next-Word Autocomplete:** Pure GPU forward inference takes ~1.5–1.9 ms. End-to-end FastAPI serialization and Pydantic validation adds ~0.3–0.5 ms, achieving ~2.0–2.4 ms response latency. This is well below the interactive threshold of human perception (50 ms).
-2. **Linear Generation Scaling:** Generation latency scales strictly linearly with token count ($O(N)$ recurrence steps), producing ~350–400 tokens per second on the laptop RTX 3050.
+2. **Linear Generation Scaling:** Generation latency scales strictly linearly with token count (O(N) recurrence steps), producing ~350–400 tokens per second on the laptop RTX 3050.
 3. **VRAM Efficiency:** The full 26.7M parameter model and inference activation caches occupy under 250 MB of VRAM, leaving ample room on a 4 GB GPU for parallel serving if needed.

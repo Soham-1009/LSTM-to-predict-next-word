@@ -43,7 +43,7 @@ Training Loader
 ## 3. Raw Data & Final Processed Corpus Statistics
 
 - **Raw Corpus:** WikiText-103 English Wikipedia Articles (542,479,871 bytes, 29,595 raw documents).
-- **Deduplication:** 689 duplicate documents removed via SHA-256 fingerprinting $\to$ 28,906 unique documents.
+- **Deduplication:** 689 duplicate documents removed via SHA-256 fingerprinting → 28,906 unique documents.
 - **Split Distribution:**
   - **Train (85%):** 24,570 documents, 89,152,843 tokens, 178,305,686 bytes (`train.bin`).
   - **Validation (7.5%):** 2,167 documents, 7,953,275 tokens, 15,906,550 bytes (`val.bin`).

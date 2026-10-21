@@ -112,7 +112,7 @@ Every retained parent work was audited individually. Automated metadata verifica
      - Spain: Life + 80 years for authors dying prior to December 7, 1987.
      - Mexico: Life + 100 years.
    - *Author-by-Author Audit:*
-     - Mary Shelley (d. 1851), Jane Austen (d. 1817), Charles Dickens (d. 1870), Bram Stoker (d. 1912), Oscar Wilde (d. 1900): All deceased $>110$ years $\to$ Worldwide public domain.
+     - Mary Shelley (d. 1851), Jane Austen (d. 1817), Charles Dickens (d. 1870), Bram Stoker (d. 1912), Oscar Wilde (d. 1900): All deceased > 110 years → Worldwide public domain.
      - Arthur Conan Doyle (d. 1930): US public domain (pre-1929); UK/EU public domain since 2000. Under Mexican copyright law, protected until 2031.
      - George Bernard Shaw (d. 1950): *Pygmalion* (1913) is US public domain. In UK/EU, entered public domain on Jan 1, 2021 (70 years post-mortem). However, under Spanish law (life+80), protected until 2031; under Mexican law (life+100), protected until 2051.
    - *Conclusion:* Public domain status is **unconditional** in the US and EU/UK, but **qualified** in territories with extended terms (Spain, Mexico). Raw text distribution in those countries is restricted.
@@ -137,7 +137,7 @@ Total Ingested Document Records:            129 (100.00%)
 2. **Quality Filtering:**
    - Fixture `test_corrupt_doc_rejected` (non-printable control chars, printable ratio 0.44) was rejected by `filter_document()`.
    - Logged as `REJECTED_QUALITY_FILTER` with `token_count = 0` and `assigned_split = "REJECTED"`.
-   - All 126 retained documents met minimum length ($\ge 100$ characters) and printable ratio ($\ge 0.95$) requirements.
+   - All 126 retained documents met minimum length (≥ 100 characters) and printable ratio (≥ 0.95) requirements.
 3. **Zero Token Leakage from Rejected Records:**
    - Authoritative audit confirmed that rejected and deduplicated records contribute exactly 0 tokens to any split or domain statistic.
 
@@ -174,20 +174,23 @@ All figures below were generated directly by `audit_pilot.py` and mathematically
   - **`news`:** Contains 5 test parent articles and 853 tokens. While providing preliminary directional validation, five test articles do not constitute a statistically adequate or broadly representative benchmark.
   - **`wikitext103_replay`, `literature`, `technical_docs`, `scientific`, `conversation`:** Contain only 1 or 2 parent works in validation and test. This proves the pipeline architecture can isolate and evaluate held-out parent works, but represents a limited smoke-test.
 - **Tier 3: Statistically Adequate Model Evaluation (Required for Full Study):**
-  A defensible domain benchmark requires $\ge 20$ independent validation parent sources and $\ge 20$ independent test parent sources per domain ($\ge 40$ held-out works per domain) to ensure statistical significance across stylistic, thematic, and syntactic variations. This expansion is designed in Phase 3D.
+  A defensible domain benchmark requires ≥ 20 independent validation parent sources and ≥ 20 independent test parent sources per domain (≥ 40 held-out works per domain) to ensure statistical significance across stylistic, thematic, and syntactic variations. This expansion is designed in Phase 3D.
 
 ---
 
 ## 5. Document-Boundary-Safe Causal Sequence Generation
 
-In causal language modeling ($P(w_t \mid w_{<t})$), training sequences are framed as shifted input/target pairs:
-$$\mathbf{x} = [w_1, w_2, \dots, w_T], \quad \mathbf{y} = [w_2, w_3, \dots, w_{T+1}]$$
+In causal language modeling (P(w_t | w_<t)), training sequences are framed as shifted input/target pairs:
+
+```text
+x = [w₁, w₂, ..., w_T],  y = [w₂, w₃, ..., w_{T+1}]
+```
 
 ### 5.1 The Boundary-Crossing Defect in Flat Concatenation
 
 When documents are concatenated into a flat binary file separated by `<EOS> <BOS>`, an unconstrained sliding window overlapping the document boundary forms sequences where:
-- $\mathbf{x}$ ends with the trailing tokens of Document $A$ and `<EOS>`.
-- $\mathbf{y}$ contains `<BOS>` and the opening tokens of Document $B$.
+- **x** ends with the trailing tokens of Document A and `<EOS>`.
+- **y** contains `<BOS>` and the opening tokens of Document B.
 
 This erroneously trains the model to predict the beginning of an unrelated document from the conclusion of a preceding one.
 
@@ -195,22 +198,25 @@ This erroneously trains the model to predict the beginning of an unrelated docum
 
 In Phase 3C, `CausalLanguageModelDataset` was refactored with explicit document offset awareness (`doc_offsets`):
 1. **Intra-Document Windowing:**
-   For document $i$ spanning tokens $[\text{offset}[i], \text{offset}[i+1])$, candidate start positions $s$ are constructed strictly such that:
-   $$\text{offset}[i] \le s \quad \text{and} \quad s + T + 1 \le \text{offset}[i+1]$$
+   For document i spanning tokens [offset[i], offset[i+1]), candidate start positions s are constructed strictly such that:
+
+   ```text
+   offset[i] ≤ s  and  s + T + 1 ≤ offset[i+1]
+   ```
 2. **Sub-Context Handling:**
-   Documents shorter than $T + 1 = 36$ tokens produce 0 sequences, avoiding padding artifacts or cross-document splicing.
+   Documents shorter than T + 1 = 36 tokens produce 0 sequences, avoiding padding artifacts or cross-document splicing.
 3. **Validation & Exception Handling:**
    - Offsets not starting at 0 raise `ValueError`.
    - Non-monotonic offsets raise `ValueError`.
-   - Offsets where $\text{offset}[-1] \neq \text{len}(\text{data})$ raise `ValueError`.
+   - Offsets where `offset[-1] ≠ len(data)` raise `ValueError`.
    - Out-of-range indices raise `IndexError`.
 
 ### 5.3 Real Pilot Verification Results
 
-Using context length $T = 35$ and stride $S = 35$ on `train.bin` (82,134 tokens across 90 documents):
+Using context length T = 35 and stride S = 35 on `train.bin` (82,134 tokens across 90 documents):
 - **Total Boundary-Safe Training Sequences Generated:** **2,301 sequences**.
-- **Document Boundary Containment:** **100.00%**. Every single sample $[s, s + 36)$ was verified to lie strictly within a single document.
-- **Zero Cross-Document Targets:** No target token in $\mathbf{y}$ was sourced from a subsequent document.
+- **Document Boundary Containment:** **100.00%**. Every single sample [s, s + 36) was verified to lie strictly within a single document.
+- **Zero Cross-Document Targets:** No target token in **y** was sourced from a subsequent document.
 
 ---
 
@@ -260,13 +266,13 @@ The overall OOV rate of **5.14%** confirms that word-level domain adaptation und
 
 ### 8.1 Partition Disjointness
 1. **Parent-Source Disjointness:**
-   - $\text{Parents}(\text{Train}) \cap \text{Parents}(\text{Val}) = \emptyset$ (0 intersecting parent works).
-   - $\text{Parents}(\text{Train}) \cap \text{Parents}(\text{Test}) = \emptyset$ (0 intersecting parent works).
-   - $\text{Parents}(\text{Val}) \cap \text{Parents}(\text{Test}) = \emptyset$ (0 intersecting parent works).
+   - Parents(Train) ∩ Parents(Val) = ∅ (0 intersecting parent works).
+   - Parents(Train) ∩ Parents(Test) = ∅ (0 intersecting parent works).
+   - Parents(Val) ∩ Parents(Test) = ∅ (0 intersecting parent works).
 2. **Document Hash Disjointness:**
-   - $\text{Hashes}(\text{Train}) \cap \text{Hashes}(\text{Val}) = \emptyset$ (0 intersecting clean document hashes).
-   - $\text{Hashes}(\text{Train}) \cap \text{Hashes}(\text{Test}) = \emptyset$ (0 intersecting clean document hashes).
-   - $\text{Hashes}(\text{Val}) \cap \text{Hashes}(\text{Test}) = \emptyset$ (0 intersecting clean document hashes).
+   - Hashes(Train) ∩ Hashes(Val) = ∅ (0 intersecting clean document hashes).
+   - Hashes(Train) ∩ Hashes(Test) = ∅ (0 intersecting clean document hashes).
+   - Hashes(Val) ∩ Hashes(Test) = ∅ (0 intersecting clean document hashes).
 
 ### 8.2 Seed 42 Determinism
 Rerunning `split_parent_sources_stratified(seed=42)` yields 100% bit-for-bit identical parent assignments, split assignments, and token distributions.
@@ -362,7 +368,7 @@ Direct cryptographic verification via Python `hashlib.sha256`:
 
 ## 12. Final Readiness Gate Verdict
 
-$$\mathbf{READY\ WITH\ RESTRICTIONS}$$
+**VERDICT: READY WITH RESTRICTIONS**
 
 ### Gate Conditions Satisfied:
 - [x] Zero parent-source split leakage.

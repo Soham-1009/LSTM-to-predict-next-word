@@ -75,10 +75,10 @@ Predicted Token
 
 | Component | Dimensions / Shape | Calculation | Trainable Parameters |
 | :--- | :--- | :--- | :--- |
-| **Embedding Layer** | $(30000, 256)$ | $30000 \times 256$ | 7,680,000 |
-| **LSTM Layer 1** | Input 256, Hidden 512 | $4 \times (256 \times 512 + 512 \times 512 + 512 + 512)$ | 1,576,960 |
-| **LSTM Layer 2** | Input 512, Hidden 512 | $4 \times (512 \times 512 + 512 \times 512 + 512 + 512)$ | 2,101,248 |
-| **Linear Projection** | $(512, 30000)$ | $512 \times 30000 + 30000$ | 15,390,000 |
+| **Embedding Layer** | (30000, 256) | 30,000 × 256 | 7,680,000 |
+| **LSTM Layer 1** | Input 256, Hidden 512 | 4 × (256 × 512 + 512 × 512 + 512 + 512) | 1,576,960 |
+| **LSTM Layer 2** | Input 512, Hidden 512 | 4 × (512 × 512 + 512 × 512 + 512 + 512) | 2,101,248 |
+| **Linear Projection** | (512, 30000) | 512 × 30,000 + 30,000 | 15,390,000 |
 | **Total Parameters** | — | — | **26,748,208** |
 
 - **Production Checkpoint:** `backend/model_artifacts/checkpoints/best_val.pt` (Epoch 46, Val Loss 3.9470, Val PPL 51.78, Test Loss 3.9174, Test PPL 50.27).

@@ -14,11 +14,11 @@ A complete, reproducible evaluation of the trained **LSTMLanguageModel** from ch
 
 ## 2. Generalization Gap Analysis
 
-- **Test Cross-Entropy Loss:** `3.9174` vs. Validation `3.9470` ($\Delta = -0.0296$)
-- **Test Perplexity:** `50.27` vs. Validation `51.78` ($\Delta = -1.51$)
-- **Top-1 Accuracy:** `32.43%` vs. Validation `32.12%` ($\Delta = +0.31\\%$)
-- **Top-3 Accuracy:** `47.51%` vs. Validation `47.14%` ($\Delta = +0.38\\%$)
-- **Top-5 Accuracy:** `53.97%` vs. Validation `53.58%` ($\Delta = +0.39\\%$)
+- **Test Cross-Entropy Loss:** `3.9174` vs. Validation `3.9470` (Δ = −0.0296)
+- **Test Perplexity:** `50.27` vs. Validation `51.78` (Δ = −1.51)
+- **Top-1 Accuracy:** `32.43%` vs. Validation `32.12%` (Δ = +0.31%)
+- **Top-3 Accuracy:** `47.51%` vs. Validation `47.14%` (Δ = +0.38%)
+- **Top-5 Accuracy:** `53.97%` vs. Validation `53.58%` (Δ = +0.39%)
 
 **Interpretation:**
 The test cross-entropy loss of 3.9174 is within 0.0296 of the validation loss (3.9470), corresponding to a perplexity delta of -1.51 (50.27 vs 51.78). Top-1 accuracy shifted by +0.31 percentage points. This demonstrates close generalization between validation and test splits of WikiText-103, confirming that the model has not severely overfit to the validation distribution.
@@ -40,7 +40,7 @@ The test cross-entropy loss of 3.9174 is within 0.0296 of the validation loss (3
 
 - **Architecture:** `LSTMLanguageModel`
 - **Vocabulary Size:** `30,000` tokens
-- **Context Length ($T$):** `35` tokens
+- **Context Length (T):** `35` tokens
 - **Embedding Dimension:** `256`
 - **Hidden Dimension:** `512`
 - **LSTM Layers:** `2`
@@ -67,6 +67,6 @@ The test cross-entropy loss of 3.9174 is within 0.0296 of the validation loss (3
 
 - [x] Complete test split evaluated (all 886 batches, 7,932,190 valid tokens).
 - [x] Test loss (3.9174) and perplexity (50.27) are finite and positive.
-- [x] Accuracies are valid and monotonic: Top-1 (32.43%) $\le$ Top-3 (47.51%) $\le$ Top-5 (53.97%).
+- [x] Accuracies are valid and monotonic: Top-1 (32.43%) ≤ Top-3 (47.51%) ≤ Top-5 (53.97%).
 - [x] Checkpoint weights were not modified or overwritten.
 - [x] Model evaluated strictly in `eval()` mode with gradient calculation disabled (`torch.inference_mode()`).
