@@ -26,7 +26,7 @@ from backend.training.serialize import (
     serialize_split_to_bin,
     write_metadata_file,
 )
-from backend.training.tokenize import build_vocabulary_from_training_split
+from backend.training.build_vocab import build_vocabulary_from_training_split
 
 
 def test_normalize_document():

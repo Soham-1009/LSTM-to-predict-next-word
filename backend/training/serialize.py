@@ -10,6 +10,7 @@ Implements requirements from Data Pipeline.md:
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -57,7 +58,8 @@ def serialize_split_to_bin(
     total_tokens = 0
     doc_count = 0
 
-    with open(bin_path, "wb") as f_bin:
+    tmp_bin_path = bin_path.with_name(f"{bin_path.name}.tmp")
+    with open(tmp_bin_path, "wb") as f_bin:
         for doc in documents:
             token_ids = tokenizer.encode(doc, add_bos=True, add_eos=True)
             if not token_ids:
@@ -70,12 +72,16 @@ def serialize_split_to_bin(
             token_offsets.append(total_tokens)
             doc_count += 1
 
+    os.replace(tmp_bin_path, bin_path)
+
     # Save document offsets as uint64
     if output_offset_path is not None:
         offset_path = Path(output_offset_path)
         offset_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_offset_path = offset_path.with_name(f"{offset_path.name}.tmp")
         offsets_arr = np.array(token_offsets, dtype=np.uint64)
-        offsets_arr.tofile(str(offset_path))
+        offsets_arr.tofile(str(tmp_offset_path))
+        os.replace(tmp_offset_path, offset_path)
 
     file_hash = compute_file_sha256(bin_path)
     return total_tokens, doc_count, file_hash

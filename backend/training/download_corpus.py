@@ -46,7 +46,9 @@ def download_and_extract_wikitext(raw_dir: Path) -> Path:
     # 1. Download archive if not already downloaded
     if not tgz_path.exists() and not target_txt.exists():
         print(f"Downloading WikiText-103 archive from: {FASTAI_WIKITEXT_URL}")
-        urllib.request.urlretrieve(FASTAI_WIKITEXT_URL, tgz_path, reporthook=reporthook)
+        tmp_tgz = tgz_path.with_suffix(".tmp")
+        urllib.request.urlretrieve(FASTAI_WIKITEXT_URL, tmp_tgz, reporthook=reporthook)
+        tmp_tgz.replace(tgz_path)
         print("\nDownload complete.")
 
     # 2. Extract articles from archive into wikitext-103.txt
@@ -60,8 +62,10 @@ def download_and_extract_wikitext(raw_dir: Path) -> Path:
         total_bytes = 0
 
         with tarfile.open(archive_file, "r:gz") as tar, open(target_txt, "w", encoding="utf-8") as out_f:
-            for member_name in ["wikitext-103/train.csv", "wikitext-103/test.csv"]:
-                member = tar.getmember(member_name)
+            for suffix in ["train.csv", "test.csv"]:
+                member = next((m for m in tar.getmembers() if m.name.endswith(suffix)), None)
+                if member is None:
+                    continue
                 f_stream = tar.extractfile(member)
                 if f_stream is None:
                     continue

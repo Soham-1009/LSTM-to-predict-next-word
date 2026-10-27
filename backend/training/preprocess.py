@@ -194,18 +194,16 @@ def split_documents_deterministic(
     rng.shuffle(shuffled)
 
     n = len(shuffled)
-    n_train = int(n * train_ratio)
-    n_val = int(n * val_ratio)
+    if n >= 3:
+        n_val = max(int(n * val_ratio), 1)
+        n_test = max(int(n * test_ratio), 1)
+        n_train = n - n_val - n_test
+    else:
+        n_train = int(n * train_ratio)
+        n_val = int(n * val_ratio)
 
     train_docs = shuffled[:n_train]
     val_docs = shuffled[n_train : n_train + n_val]
     test_docs = shuffled[n_train + n_val :]
-
-    # In case of small datasets, guarantee at least 1 document per split if total >= 3
-    if n >= 3:
-        if len(val_docs) == 0 and len(train_docs) > 1:
-            val_docs = [train_docs.pop()]
-        if len(test_docs) == 0 and len(train_docs) > 1:
-            test_docs = [train_docs.pop()]
 
     return train_docs, val_docs, test_docs

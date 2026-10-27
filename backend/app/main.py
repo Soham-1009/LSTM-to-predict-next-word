@@ -85,15 +85,18 @@ class InferenceService:
         self._init_lock = threading.Lock()
         self._model_lock = threading.Lock()
 
-    def resolve_checkpoint_path(self, checkpoint_name: str) -> Path:
-        """Resolve path to checkpoint file."""
-        if checkpoint_name == "baseline":
+    def resolve_checkpoint_path(self, checkpoint_name: str) -> tuple[str, Path]:
+        """Resolve path to checkpoint file, supporting both canonical names and filename aliases."""
+        norm_name = checkpoint_name.lower().strip()
+        if norm_name in ("baseline", "best_val.pt"):
+            canonical_name = "baseline"
             ckpt_path = Path("backend/model_artifacts/checkpoints/best_val.pt")
             if not ckpt_path.exists():
                 candidate = Path(__file__).resolve().parent.parent / "model_artifacts" / "checkpoints" / "best_val.pt"
                 if candidate.exists():
                     ckpt_path = candidate
-        elif checkpoint_name == "adapted":
+        elif norm_name in ("adapted", "multidomain_adapted.pt"):
+            canonical_name = "adapted"
             ckpt_path = Path("experiments/multidomain_v1/checkpoints/multidomain_adapted.pt")
             if not ckpt_path.exists():
                 candidate = Path(__file__).resolve().parent.parent.parent / "experiments" / "multidomain_v1" / "checkpoints" / "multidomain_adapted.pt"
@@ -101,23 +104,34 @@ class InferenceService:
                     ckpt_path = candidate
         else:
             raise ValueError(f"Unknown checkpoint '{checkpoint_name}'. Choose 'baseline' or 'adapted'.")
-        return ckpt_path
+        return canonical_name, ckpt_path
 
     def load_checkpoint(self, checkpoint_name: str) -> str:
         """Load specified checkpoint weights into current model architecture.
 
-        Thread-safe: holds _model_lock during the full state_dict replacement
-        so that no concurrent forward pass sees a half-loaded model.
+        Thread-safe: constructs new model instance and atomically swaps self.model,
+        preventing in-place parameter mutation during concurrent generation runs.
         """
-        ckpt_path = self.resolve_checkpoint_path(checkpoint_name)
+        canonical_name, ckpt_path = self.resolve_checkpoint_path(checkpoint_name)
         if not ckpt_path.exists():
             raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
 
         checkpoint = torch.load(ckpt_path, map_location=self.device, weights_only=True)
+        vocab_size = max(len(self.tokenizer), self.config.vocab_size)
+        new_model = LSTMLanguageModel(
+            vocab_size=vocab_size,
+            embed_dim=self.config.embed_dim,
+            hidden_dim=self.config.hidden_dim,
+            num_layers=self.config.num_layers,
+            dropout=self.config.dropout,
+            pad_idx=self.tokenizer.pad_id,
+        ).to(self.device)
+        new_model.load_state_dict(checkpoint["model_state_dict"])
+        new_model.eval()
+
         with self._model_lock:
-            self.model.load_state_dict(checkpoint["model_state_dict"])
-            self.model.eval()
-            self.active_checkpoint_name = checkpoint_name
+            self.model = new_model
+            self.active_checkpoint_name = canonical_name
             self.checkpoint_loaded = True
         return str(ckpt_path)
 
@@ -147,6 +161,7 @@ class InferenceService:
             dropout=self.config.dropout,
             pad_idx=self.tokenizer.pad_id,
         ).to(self.device)
+        self.model.eval()
 
         # Attempt to load baseline checkpoint weights
         try:
@@ -154,8 +169,6 @@ class InferenceService:
             print(f"Loaded baseline model weights from {loaded_path}")
         except Exception as e:
             print(f"Warning: could not load baseline checkpoint: {e}")
-
-        self.model.eval()
 
     def ensure_initialized(self) -> None:
         """Ensure model and tokenizer are initialized even if lifespan was bypassed."""
@@ -185,7 +198,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
