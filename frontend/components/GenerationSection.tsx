@@ -52,7 +52,7 @@ export default function GenerationSection({
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Generation failed";
       if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("fetch")) {
-        setError("Backend not connected. Start FastAPI locally ('uvicorn backend.app.main:app') or click the badge in the top right to configure your backend URL.");
+        setError("Backend not connected. Start FastAPI locally ('uvicorn backend.app.main:app') or configure your URL in the status badge.");
       } else {
         setError(msg);
       }
@@ -62,20 +62,19 @@ export default function GenerationSection({
   };
 
   return (
-    <div className="bg-white/85 dark:bg-neutral-900/70 border border-slate-200/90 dark:border-neutral-800/80 backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-5 transition-colors duration-200">
-      <div className="border-b border-slate-200 dark:border-neutral-800/60 pb-4">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-neutral-100 flex items-center gap-2">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-violet-400" />
-          Autoregressive Text Generation
+    <div className="bg-[var(--surface)] border border-[var(--border)] rounded p-5 space-y-4">
+      <div className="pb-3 border-b border-[var(--rule)]">
+        <h2 className="text-base font-semibold text-[var(--text)]">
+          Autoregressive Sequence Generation
         </h2>
-        <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">
-          Generate natural text continuations using configurable sampling strategies (Greedy, Temperature, Top-K, Nucleus/Top-P).
+        <p className="text-[13px] text-[var(--muted)] mt-0.5">
+          Iterative autoregressive token generation using nucleus sampling, temperature scaling, and greedy decoding.
         </p>
       </div>
 
       <div className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-xs font-medium text-slate-700 dark:text-neutral-300">Prompt:</label>
+        <div className="space-y-1.5">
+          <label className="text-[13px] font-medium text-[var(--muted)]">Seed prompt:</label>
           <textarea
             value={prompt}
             onChange={(e) => {
@@ -89,17 +88,19 @@ export default function GenerationSection({
               }
             }}
             rows={3}
-            placeholder="Enter seed prompt..."
-            className="w-full bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 rounded-xl p-3.5 text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:bg-white dark:focus:bg-neutral-950/80 transition-all resize-none"
+            placeholder="Enter seed prompt sequence..."
+            className="w-full bg-[var(--ground)] border border-[var(--control)] rounded p-3 text-sm text-[var(--text)] placeholder-[var(--faint)] font-mono resize-none focus:outline-none focus:border-[var(--accent)] leading-relaxed"
           />
         </div>
 
         {/* Hyperparameters / Sampling Controls Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-50/80 dark:bg-neutral-950/60 border border-slate-200 dark:border-neutral-800/70 rounded-xl">
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-600 dark:text-neutral-400">Temperature</span>
-              <span className="font-mono text-violet-600 dark:text-violet-400">{greedy ? "0.0 (Greedy)" : temperature.toFixed(2)}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-3.5 bg-[var(--ground)] border border-[var(--border)] rounded">
+          <div className="space-y-1">
+            <div className="flex justify-between text-[13px]">
+              <span className="text-[var(--muted)]">Temperature</span>
+              <span className="tabular-nums text-[var(--text)] font-medium">
+                {greedy ? "0.0 (Greedy)" : temperature.toFixed(2)}
+              </span>
             </div>
             <input
               type="range"
@@ -109,14 +110,17 @@ export default function GenerationSection({
               value={temperature}
               disabled={greedy}
               onChange={(e) => setTemperature(parseFloat(e.target.value))}
-              className="w-full accent-violet-500 cursor-pointer disabled:opacity-40"
+              className="w-full cursor-pointer disabled:opacity-40"
+              style={{ accentColor: "var(--accent)" }}
             />
           </div>
 
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-600 dark:text-neutral-400">Top-K</span>
-              <span className="font-mono text-violet-600 dark:text-violet-400">{greedy ? "Overridden" : topK}</span>
+          <div className="space-y-1">
+            <div className="flex justify-between text-[13px]">
+              <span className="text-[var(--muted)]">Top-K</span>
+              <span className="tabular-nums text-[var(--text)] font-medium">
+                {greedy ? "Overridden" : topK}
+              </span>
             </div>
             <input
               type="range"
@@ -126,14 +130,17 @@ export default function GenerationSection({
               value={topK}
               disabled={greedy}
               onChange={(e) => setTopK(parseInt(e.target.value))}
-              className="w-full accent-violet-500 cursor-pointer disabled:opacity-40"
+              className="w-full cursor-pointer disabled:opacity-40"
+              style={{ accentColor: "var(--accent)" }}
             />
           </div>
 
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-600 dark:text-neutral-400">Top-P (Nucleus)</span>
-              <span className="font-mono text-violet-600 dark:text-violet-400">{greedy ? "Overridden" : topP.toFixed(2)}</span>
+          <div className="space-y-1">
+            <div className="flex justify-between text-[13px]">
+              <span className="text-[var(--muted)]">Top-P (Nucleus)</span>
+              <span className="tabular-nums text-[var(--text)] font-medium">
+                {greedy ? "Overridden" : topP.toFixed(2)}
+              </span>
             </div>
             <input
               type="range"
@@ -143,14 +150,17 @@ export default function GenerationSection({
               value={topP}
               disabled={greedy}
               onChange={(e) => setTopP(parseFloat(e.target.value))}
-              className="w-full accent-violet-500 cursor-pointer disabled:opacity-40"
+              className="w-full cursor-pointer disabled:opacity-40"
+              style={{ accentColor: "var(--accent)" }}
             />
           </div>
 
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-600 dark:text-neutral-400">Max Tokens</span>
-              <span className="font-mono text-violet-600 dark:text-violet-400">{maxTokens}</span>
+          <div className="space-y-1">
+            <div className="flex justify-between text-[13px]">
+              <span className="text-[var(--muted)]">Max Tokens</span>
+              <span className="tabular-nums text-[var(--text)] font-medium">
+                {maxTokens}
+              </span>
             </div>
             <input
               type="range"
@@ -159,26 +169,28 @@ export default function GenerationSection({
               step="5"
               value={maxTokens}
               onChange={(e) => setMaxTokens(parseInt(e.target.value))}
-              className="w-full accent-violet-500 cursor-pointer"
+              className="w-full cursor-pointer"
+              style={{ accentColor: "var(--accent)" }}
             />
           </div>
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-700 dark:text-neutral-300">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-[13px] text-[var(--text)]">
             <input
               type="checkbox"
               checked={greedy}
               onChange={(e) => setGreedy(e.target.checked)}
-              className="rounded bg-slate-100 dark:bg-neutral-800 border-slate-300 dark:border-neutral-700 text-violet-500 focus:ring-violet-500/40"
+              className="rounded border-[var(--control)] text-[var(--accent)] focus:ring-0"
+              style={{ accentColor: "var(--accent)" }}
             />
-            <span>Greedy Decoding (Always select argmax)</span>
+            <span>Greedy decoding (deterministic argmax)</span>
           </label>
 
           <button
             onClick={handleGenerate}
             disabled={loading || !prompt.trim()}
-            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-medium text-xs rounded-lg shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 bg-[var(--accent)] hover:opacity-90 text-white font-medium text-[13px] rounded transition-opacity duration-150 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
           >
             {loading ? (
               <>
@@ -186,31 +198,31 @@ export default function GenerationSection({
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                 </svg>
-                Generating Sequence...
+                <span>Generating...</span>
               </>
             ) : (
-              <span>Generate Sequence</span>
+              <span>Generate sequence</span>
             )}
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 text-xs rounded-lg p-3">
+        <div className="bg-[var(--pill-negative-bg)] border border-[var(--negative)] text-[var(--pill-negative-ink)] text-[13px] rounded p-3">
           {error}
         </div>
       )}
 
       {result && (
-        <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-neutral-800/60">
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-neutral-400">
-            <span className="font-semibold uppercase tracking-wider">Generated Output:</span>
-            <span className="font-mono text-[11px] text-slate-500 dark:text-neutral-500">
-              {result.tokens_generated} tokens • reason: {result.finish_reason}
+        <div className="space-y-2 pt-3 border-t border-[var(--rule)]">
+          <div className="flex items-center justify-between text-[13px] text-[var(--muted)]">
+            <span className="font-medium text-[var(--text)]">Generated text continuation:</span>
+            <span className="tabular-nums text-xs text-[var(--muted)]">
+              {result.tokens_generated} tokens produced · stop: {result.finish_reason}
             </span>
           </div>
-          <div className="bg-slate-50 dark:bg-neutral-950/90 border border-slate-200 dark:border-neutral-800 rounded-xl p-4 font-mono text-sm text-slate-900 dark:text-neutral-200 whitespace-pre-wrap leading-relaxed">
-            <span className="text-violet-700 dark:text-violet-300 font-semibold">{result.prompt}</span>
+          <div className="bg-[var(--ground)] border border-[var(--border)] rounded p-4 font-mono text-[13px] text-[var(--text)] whitespace-pre-wrap leading-relaxed">
+            <span className="text-[var(--accent)] font-semibold">{result.prompt}</span>
             <span>
               {(() => {
                 const tokenRegex = /\w+(?:'\w+)?|[^\w\s]/g;

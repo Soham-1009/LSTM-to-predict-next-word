@@ -3,91 +3,147 @@
 import React from "react";
 
 export default function HowItWorks() {
-  const steps = [
+  const stages = [
     {
-      num: "01",
-      title: "Input Text & Tokenization",
-      tag: "Preprocessing",
-      desc: "The prompt string is normalized and split into distinct word and punctuation tokens, which are mapped to numerical IDs using a fixed vocabulary.",
+      title: "Input Text & Boundary Tokenization",
+      role: "Preprocessing",
+      desc: "Raw text is normalized and split into distinct word and punctuation tokens. A fixed 30,000-token vocabulary maps strings into sequence indices.",
     },
     {
-      num: "02",
-      title: "Word Embedding (256d)",
-      tag: "Vector Space",
-      desc: "Discrete token indices are converted into dense 256-dimensional vector representations capturing semantic relationships.",
+      title: "Dense Embedding Projection",
+      role: "256 Dimensions",
+      desc: "Discrete token indices are converted into dense continuous vector representations capturing semantic and syntactic distributional geometry.",
     },
     {
-      num: "03",
-      title: "2-Layer LSTM (512d Hidden)",
-      tag: "Sequential Modeling",
-      desc: "Stacked recurrent layers process the sequence sequentially with forget, input, and output gates. 30% dropout prevents co-adaptation.",
+      title: "Stacked Recurrent Modeling",
+      role: "2-Layer LSTM (512d Hidden)",
+      desc: "Stacked recurrent layers with input, forget, and output gates propagate causal temporal dependencies with 0.3 dropout regularization.",
     },
     {
-      num: "04",
-      title: "Linear Projection & Logits",
-      tag: "Classification",
-      desc: "The final hidden state vector is projected through a linear layer back into the full vocabulary space (~30k–50k logits).",
+      title: "Linear Vocabulary Projection",
+      role: "Logits Tensor",
+      desc: "The final hidden state vector projects through a linear layer into raw, unnormalized logits across all 30,000 vocabulary tokens.",
     },
     {
-      num: "05",
-      title: "Softmax & Sampling Strategy",
-      tag: "Inference Controls",
-      desc: "Logits are transformed into probability distributions. Temperature scales peakiness; Top-K and Top-P (nucleus) eliminate the long tail.",
+      title: "Softmax Distribution & Sampling",
+      role: "Probability Estimation",
+      desc: "Logits are transformed into categorical probability distributions. Nucleus (Top-P), Top-K, and temperature scaling filter low-probability tails.",
     },
     {
-      num: "06",
-      title: "Decoding & Autoregressive Loop",
-      tag: "Generation",
-      desc: "The chosen token ID is decoded back to text. In generation mode, the token is appended to the context for the next recursive step until EOS.",
+      title: "Autoregressive Decoding Loop",
+      role: "Sequence Emission",
+      desc: "Sampled tokens are appended back to the context window (length 35) to predict successive words iteratively until an EOS token or length limit.",
     },
   ];
 
+  const specs = [
+    { param: "Model Architecture", value: "2-Layer Causal LSTM" },
+    { param: "Embedding Dimension", value: "256" },
+    { param: "Hidden Dimension", value: "512 units per layer" },
+    { param: "Context Window", value: "35 tokens" },
+    { param: "Vocabulary Size", value: "30,000 word-level tokens" },
+    { param: "Base Training Corpus", value: "WikiText-103 (103M tokens)" },
+    { param: "Dropout Rate", value: "0.3 (recurrent & embedding)" },
+    { param: "Serving Framework", value: "FastAPI + PyTorch inference_mode" },
+  ];
+
   return (
-    <div className="bg-white/85 dark:bg-neutral-900/60 border border-slate-200/90 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xl space-y-6 transition-colors duration-200">
-      <div>
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-neutral-100">How It Works</h2>
-        </div>
-        <p className="text-xs text-slate-500 dark:text-neutral-400 mt-1">
-          End-to-end execution flow of the LSTM Causal Language Model inference pipeline.
+    <div className="bg-[var(--surface)] border border-[var(--border)] rounded p-5 space-y-6">
+      <div className="pb-3 border-b border-[var(--rule)]">
+        <h2 className="text-base font-semibold text-[var(--text)]">
+          Language Model Architecture & Pipeline
+        </h2>
+        <p className="text-xs text-[var(--muted)] mt-0.5">
+          End-to-end execution flow of the recurrent causal neural network from raw text input to next-token emission.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {steps.map((step) => (
+      {/* Stage Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        {stages.map((stage) => (
           <div
-            key={step.num}
-            className="p-4 bg-slate-50 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800/70 rounded-xl space-y-2 hover:border-slate-300 dark:hover:border-neutral-700 transition-colors"
+            key={stage.title}
+            className="p-3.5 bg-[var(--ground)] border border-[var(--border)] rounded space-y-1.5"
           >
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs font-bold text-cyan-700 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-200 dark:border-cyan-800/50">
-                {step.num}
-              </span>
-              <span className="text-[10px] uppercase font-mono text-slate-600 dark:text-neutral-400 bg-slate-200 dark:bg-neutral-800/60 px-2 py-0.5 rounded">
-                {step.tag}
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-medium text-[var(--accent)]">
+                {stage.role}
               </span>
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-neutral-200">{step.title}</h3>
-            <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">{step.desc}</p>
+            <h3 className="text-xs font-semibold text-[var(--text)]">
+              {stage.title}
+            </h3>
+            <p className="text-xs text-[var(--muted)] leading-relaxed">
+              {stage.desc}
+            </p>
           </div>
         ))}
       </div>
 
       {/* Pipeline Diagram */}
-      <div className="p-4 bg-slate-50 dark:bg-neutral-950/90 border border-slate-200 dark:border-neutral-800/70 rounded-xl overflow-x-auto">
-        <div className="flex items-center justify-between min-w-[600px] text-xs font-mono text-slate-700 dark:text-neutral-300">
-          <span className="px-2 py-1 bg-white dark:bg-neutral-800 rounded border border-slate-200 dark:border-neutral-700">Raw Text</span>
-          <span className="text-slate-400 dark:text-neutral-500">→</span>
-          <span className="px-2 py-1 bg-white dark:bg-neutral-800 rounded border border-slate-200 dark:border-neutral-700">Tokenizer</span>
-          <span className="text-slate-400 dark:text-neutral-500">→</span>
-          <span className="px-2 py-1 bg-white dark:bg-neutral-800 rounded border border-slate-200 dark:border-neutral-700">Embed (256)</span>
-          <span className="text-slate-400 dark:text-neutral-500">→</span>
-          <span className="px-2 py-1 bg-white dark:bg-neutral-800 rounded border border-slate-200 dark:border-neutral-700">2x LSTM (512)</span>
-          <span className="text-slate-400 dark:text-neutral-500">→</span>
-          <span className="px-2 py-1 bg-white dark:bg-neutral-800 rounded border border-slate-200 dark:border-neutral-700">Linear (Vocab)</span>
-          <span className="text-slate-400 dark:text-neutral-500">→</span>
-          <span className="px-2 py-1 bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 rounded border border-cyan-200 dark:border-cyan-700">Sample / Softmax</span>
+      <div className="space-y-2">
+        <h3 className="text-xs font-semibold text-[var(--text)]">
+          Sequential Data Flow
+        </h3>
+        <div className="p-3.5 bg-[var(--ground)] border border-[var(--border)] rounded overflow-x-auto">
+          <div className="flex items-center justify-between min-w-[620px] text-xs text-[var(--text)]">
+            <span className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded font-mono text-[11px]">
+              Raw Text Context
+            </span>
+            <span className="text-[var(--faint)]">→</span>
+            <span className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded font-mono text-[11px]">
+              Tokenizer (Vocab 30k)
+            </span>
+            <span className="text-[var(--faint)]">→</span>
+            <span className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded font-mono text-[11px]">
+              Embedding (256d)
+            </span>
+            <span className="text-[var(--faint)]">→</span>
+            <span className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded font-mono text-[11px]">
+              2× LSTM (512d)
+            </span>
+            <span className="text-[var(--faint)]">→</span>
+            <span className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded font-mono text-[11px]">
+              Linear Logits
+            </span>
+            <span className="text-[var(--faint)]">→</span>
+            <span className="px-2 py-1 bg-[var(--surface)] border border-[var(--accent)] text-[var(--accent)] rounded font-mono text-[11px] font-medium">
+              Softmax / Sample
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Model Specifications Table */}
+      <div className="space-y-2">
+        <h3 className="text-xs font-semibold text-[var(--text)]">
+          System Specifications
+        </h3>
+        <div className="border border-[var(--border)] rounded overflow-hidden">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-[var(--ground)] border-b border-[var(--border)]">
+                <th className="py-2 px-3 font-medium text-[var(--muted)] text-left">
+                  Specification Parameter
+                </th>
+                <th className="py-2 px-3 font-medium text-[var(--muted)] text-right">
+                  Configuration Value
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--rule)]">
+              {specs.map((item) => (
+                <tr key={item.param} className="hover:bg-[var(--ground)]">
+                  <td className="py-2 px-3 text-[var(--text)]">
+                    {item.param}
+                  </td>
+                  <td className="py-2 px-3 text-right font-mono text-[12px] text-[var(--muted)]">
+                    {item.value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

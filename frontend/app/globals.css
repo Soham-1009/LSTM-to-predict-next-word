@@ -3,29 +3,109 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  /* Data Terminal tokens — Dark theme default */
+  --ground: #121316;
+  --surface: #18191e;
+  --raised: #212329;
+  --border: #282a32;
+  --rule: #23252c;
+  --control: #383b44;
+  --text: #f3f4f6;
+  --muted: #9da3ad;
+  --faint: #9297a3;
+  --accent: #266ecd;
+  --accent-faint: rgba(38, 110, 205, 0.15);
+  --positive: #44a282;
+  --negative: #e5566f;
+  --warning: #d9a441;
+  --chart-1: #f2f2f3;
+  --chart-2: #e5566f;
+  --chart-3: #4a8ad6;
+  --pill-positive-bg: #142820;
+  --pill-positive-ink: #5fc39c;
+  --pill-negative-bg: #2d181e;
+  --pill-negative-ink: #e5566f;
+  --pill-warning-bg: #2b2314;
+  --pill-warning-ink: #d9a441;
+  --pill-neutral-bg: #212329;
+  --pill-neutral-ink: #c8cbd0;
+
+  --font: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --radius-card: 8px;
+  --radius-control: 6px;
 }
 
-:root.dark, html.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+html.light, :root.light {
+  /* Data Terminal tokens — Light theme */
+  --ground: #f4f5f8;
+  --surface: #ffffff;
+  --raised: #eaedf2;
+  --border: #d8dce3;
+  --rule: #e5e8ef;
+  --control: #b0b7c3;
+  --text: #121316;
+  --muted: #555963;
+  --faint: #6c727d;
+  --accent: #2b6cb0;
+  --accent-faint: rgba(43, 108, 176, 0.1);
+  --positive: #227b52;
+  --negative: #c82845;
+  --warning: #9a650c;
+  --chart-1: #121316;
+  --chart-2: #c82845;
+  --chart-3: #2b6cb0;
+  --pill-positive-bg: #dcf5e7;
+  --pill-positive-ink: #0d4a2d;
+  --pill-negative-bg: #fde8ec;
+  --pill-negative-ink: #8c1027;
+  --pill-warning-bg: #fef3d6;
+  --pill-warning-ink: #704705;
+  --pill-neutral-bg: #eaedf2;
+  --pill-neutral-ink: #2b2d33;
 }
 
-:root.light, html.light {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: var(--ground);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular figures for numbers, metrics, timestamps, and data tables */
+.tabular-nums, table, th, td, .kpi-num {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbars that blend cleanly */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--control);
 }

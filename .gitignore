@@ -178,7 +178,11 @@ ehthumbs.db
 desktop.ini
 $RECYCLE.BIN/
 
-# Agent / Tooling local metadata
+# Agent / Tooling local metadata & skill artifacts
 .agents/
 .gemini/
+.taste-skill/
+**/.taste-skill/
+frontend/AGENTS.md
+frontend/CLAUDE.md
 

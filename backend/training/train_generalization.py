@@ -198,6 +198,7 @@ def run_domain_adaptation(
         # Save checkpoint if best
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
+            tmp_path = output_path.with_suffix(output_path.suffix + ".tmp")
             torch.save(
                 {
                     "model_state_dict": model.state_dict(),
@@ -207,8 +208,9 @@ def run_domain_adaptation(
                     "baseline_val_loss": baseline_val_loss,
                     "adaptation_learning_rate": learning_rate,
                 },
-                output_path,
+                tmp_path,
             )
+            os.replace(tmp_path, output_path)  # atomic on same filesystem
 
     total_training_time = time.time() - start_time
     print(f"\n[5/5] Domain adaptation complete in {total_training_time:.2f}s.")

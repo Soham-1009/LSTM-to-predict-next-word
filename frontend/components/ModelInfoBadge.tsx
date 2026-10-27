@@ -56,10 +56,10 @@ export default function ModelInfoBadge() {
       setHealth(h);
       setModelInfo(m);
       if (h.status === "ok") {
-        setConnMessage({ text: "Connected successfully to backend!", ok: true });
+        setConnMessage({ text: "Connected successfully to backend", ok: true });
         setTimeout(() => setShowConfig(false), 2000);
       } else {
-        setConnMessage({ text: "Backend unreachable at this URL.", ok: false });
+        setConnMessage({ text: "Backend unreachable at this URL", ok: false });
       }
     } catch {
       setConnMessage({ text: "Connection failed. Check URL and CORS.", ok: false });
@@ -70,111 +70,111 @@ export default function ModelInfoBadge() {
 
   const isOnline = health?.status === "ok" && modelInfo?.checkpoint_loaded;
   const isDegraded = health?.status === "ok" && !modelInfo?.checkpoint_loaded;
-  const isStaticDemo = health?.status === "offline";
 
   return (
     <div className="relative">
       <button
         type="button"
         onClick={() => setShowConfig(!showConfig)}
-        title="Click to view or configure backend connection"
-        className="flex flex-wrap items-center gap-2 text-xs text-slate-700 dark:text-neutral-300 bg-white/90 dark:bg-neutral-900/80 hover:bg-slate-50 dark:hover:bg-neutral-800 border border-slate-200/90 dark:border-neutral-800 rounded-lg px-3 py-1.5 shadow-sm transition cursor-pointer"
+        title="View or configure backend connection settings"
+        className="flex items-center gap-2 text-[13px] text-[var(--muted)] hover:text-[var(--text)] bg-[var(--surface)] hover:bg-[var(--raised)] border border-[var(--border)] rounded px-2.5 py-1.5 transition-colors duration-150 cursor-pointer"
       >
-        <div className="flex items-center gap-1.5">
-          <span
-            className={`w-2 h-2 rounded-full ${
-              isOnline
-                ? "bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
-                : isDegraded
-                ? "bg-amber-500 dark:bg-amber-400"
-                : "bg-sky-500 dark:bg-sky-400 animate-pulse"
-            }`}
-          />
-          <span
-            className={`font-medium ${
-              isOnline
-                ? "text-emerald-600 dark:text-emerald-400"
-                : isDegraded
-                ? "text-amber-600 dark:text-amber-400"
-                : "text-sky-600 dark:text-sky-400"
-            }`}
-          >
-            {isOnline ? "Online" : isDegraded ? "Degraded" : "Static Demo"}
-          </span>
-        </div>
-        <span className="text-slate-300 dark:text-neutral-600">|</span>
-        <span className="hidden sm:inline">{modelInfo?.architecture ?? "LSTM"}</span>
-        <span className="text-slate-300 dark:text-neutral-600 hidden sm:inline">|</span>
-        <span className="bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-transparent text-slate-800 dark:text-neutral-300 px-1.5 py-0.5 rounded font-mono uppercase text-[10px]">
+        <span
+          className="w-2 h-2 rounded-full shrink-0"
+          style={{
+            backgroundColor: isOnline
+              ? "var(--positive)"
+              : isDegraded
+              ? "var(--warning)"
+              : "var(--accent)",
+          }}
+        />
+        <span className="font-medium text-[var(--text)]">
+          {isOnline ? "Online" : isDegraded ? "Degraded" : "Static Demo"}
+        </span>
+        <span className="text-[var(--border)]">/</span>
+        <span className="hidden sm:inline text-[var(--muted)]">
+          {modelInfo?.architecture ? "2-Layer LSTM" : "LSTM"}
+        </span>
+        <span className="text-[var(--border)] hidden sm:inline">/</span>
+        <span className="tabular-nums text-[var(--muted)]">
           {health?.device ?? "CPU"}
         </span>
-        <span className="text-slate-300 dark:text-neutral-600">|</span>
-        <span className="text-slate-500 dark:text-neutral-400">Vocab: 30,000</span>
+        <span className="text-[var(--border)] hidden md:inline">/</span>
+        <span className="tabular-nums text-[var(--muted)] hidden md:inline">
+          30,000 vocab
+        </span>
       </button>
 
       {/* Backend Configuration Modal / Popover */}
       {showConfig && (
-        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl shadow-xl p-4 z-50 text-xs">
-          <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100 dark:border-neutral-800">
-            <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <span>Backend Connection Settings</span>
+        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-[var(--surface)] border border-[var(--border)] rounded p-4 z-50 text-[13px]">
+          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-[var(--rule)]">
+            <h3 className="font-semibold text-sm text-[var(--text)]">
+              Backend Connection
             </h3>
             <button
               onClick={() => setShowConfig(false)}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-neutral-200"
+              className="p-1 text-[var(--muted)] hover:text-[var(--text)] rounded cursor-pointer"
+              aria-label="Close connection settings"
             >
-              ✕
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
           <div className="space-y-3">
             <div>
-              <p className="text-slate-600 dark:text-neutral-400 mb-1">
-                <strong>Current State:</strong>{" "}
-                <span className={isOnline ? "text-emerald-500" : "text-sky-400"}>
+              <p className="text-[var(--muted)] mb-1">
+                <strong>Status:</strong>{" "}
+                <span className="text-[var(--text)]">
                   {isOnline
-                    ? "Connected to active FastAPI inference server"
+                    ? "Connected to active FastAPI inference backend"
                     : isDegraded
-                    ? "Connected, but PyTorch model weights missing"
-                    : "Static GitHub Pages Showcase (Bundled Evaluation & Specs)"}
+                    ? "Connected, but PyTorch checkpoint weights missing"
+                    : "Static Showcase (Bundled multi-domain benchmark & specs)"}
                 </span>
               </p>
-              <p className="text-[11px] text-slate-500 dark:text-neutral-400 leading-relaxed">
-                GitHub Pages hosts the static Next.js frontend. The Multi-Domain Evaluation dashboard and architecture specs are fully functional offline.
+              <p className="text-xs text-[var(--faint)] leading-relaxed">
+                Static deployment hosts offline evaluation metrics and architectural specs. Connect to FastAPI for real-time inference.
               </p>
             </div>
 
-            <div className="bg-slate-50 dark:bg-neutral-950 p-2.5 rounded-lg border border-slate-200 dark:border-neutral-800">
-              <label className="block text-[11px] font-medium text-slate-700 dark:text-neutral-300 mb-1">
+            <div className="bg-[var(--ground)] p-3 rounded border border-[var(--border)] space-y-2">
+              <label className="block text-xs font-medium text-[var(--muted)]">
                 FastAPI Backend URL:
               </label>
-              <div className="flex gap-1.5">
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={customUrl}
                   onChange={(e) => setCustomUrl(e.target.value)}
                   placeholder="http://127.0.0.1:8000"
-                  className="flex-1 px-2.5 py-1 text-xs bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                  className="flex-1 px-2.5 py-1.5 text-xs bg-[var(--surface)] border border-[var(--control)] rounded text-[var(--text)] focus:outline-none focus:border-[var(--accent)] font-mono"
                 />
                 <button
                   type="button"
                   onClick={handleSaveUrl}
                   disabled={testingConnection}
-                  className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-medium text-xs transition disabled:opacity-50"
+                  className="px-3 py-1.5 bg-[var(--accent)] hover:opacity-90 text-white rounded font-medium text-xs transition-opacity cursor-pointer disabled:opacity-50"
                 >
                   {testingConnection ? "..." : "Connect"}
                 </button>
               </div>
               {connMessage && (
-                <p className={`mt-1.5 text-[11px] ${connMessage.ok ? "text-emerald-500" : "text-red-400"}`}>
+                <p
+                  className="text-xs"
+                  style={{ color: connMessage.ok ? "var(--positive)" : "var(--negative)" }}
+                >
                   {connMessage.text}
                 </p>
               )}
             </div>
 
-            <div className="text-[11px] text-slate-500 dark:text-neutral-400">
-              <p className="font-semibold text-slate-700 dark:text-neutral-300 mb-0.5">To run live inference locally:</p>
-              <code className="block bg-slate-100 dark:bg-neutral-950 px-2 py-1 rounded font-mono text-[10px] text-slate-800 dark:text-neutral-300">
+            <div className="text-xs text-[var(--muted)] space-y-1">
+              <p className="font-medium text-[var(--text)]">Run inference locally:</p>
+              <code className="block bg-[var(--ground)] p-2 rounded text-xs text-[var(--text)] border border-[var(--rule)]">
                 uvicorn backend.app.main:app --port 8000
               </code>
             </div>

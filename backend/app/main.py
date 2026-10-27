@@ -83,6 +83,7 @@ class InferenceService:
         self.active_checkpoint_name: str = "baseline"
         self.device = DEVICE
         self._init_lock = threading.Lock()
+        self._model_lock = threading.Lock()
 
     def resolve_checkpoint_path(self, checkpoint_name: str) -> Path:
         """Resolve path to checkpoint file."""
@@ -103,16 +104,21 @@ class InferenceService:
         return ckpt_path
 
     def load_checkpoint(self, checkpoint_name: str) -> str:
-        """Load specified checkpoint weights into current model architecture."""
+        """Load specified checkpoint weights into current model architecture.
+
+        Thread-safe: holds _model_lock during the full state_dict replacement
+        so that no concurrent forward pass sees a half-loaded model.
+        """
         ckpt_path = self.resolve_checkpoint_path(checkpoint_name)
         if not ckpt_path.exists():
             raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
 
         checkpoint = torch.load(ckpt_path, map_location=self.device, weights_only=True)
-        self.model.load_state_dict(checkpoint["model_state_dict"])
-        self.model.eval()
-        self.active_checkpoint_name = checkpoint_name
-        self.checkpoint_loaded = True
+        with self._model_lock:
+            self.model.load_state_dict(checkpoint["model_state_dict"])
+            self.model.eval()
+            self.active_checkpoint_name = checkpoint_name
+            self.checkpoint_loaded = True
         return str(ckpt_path)
 
     def initialize(self) -> None:
@@ -292,8 +298,10 @@ def predict_next_word(request: PredictRequest) -> PredictResponse:
 
     # 2. Forward pass through LSTM
     try:
+        with service._model_lock:
+            model_ref = service.model
         with torch.inference_mode():
-            logits, _ = service.model(input_tensor)
+            logits, _ = model_ref(input_tensor)
             # Extract logits for the final step: shape (vocab_size,)
             last_logits = logits[0, -1, :].clone()
 
@@ -367,11 +375,13 @@ def generate_text(request: GenerateRequest) -> GenerateResponse:
         finish_reason = "length"
 
         # 2. Autoregressive generation loop
+        with service._model_lock:
+            model_ref = service.model
         with torch.inference_mode():
             for _ in range(request.max_new_tokens):
                 context = generated_ids[-service.config.context_length :]
                 inp = torch.tensor([context], dtype=torch.long, device=service.device)
-                logits, _ = service.model(inp)
+                logits, _ = model_ref(inp)
                 step_logits = logits[0, -1, :].clone()
                 step_logits = torch.nan_to_num(step_logits, nan=-float("inf"), posinf=1e9, neginf=-float("inf"))
 

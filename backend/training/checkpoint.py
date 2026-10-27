@@ -1,5 +1,6 @@
 """Checkpoint management for training resumption and model artifact deployment."""
 
+import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 import torch
@@ -17,7 +18,11 @@ def save_checkpoint(
     val_loss: float = float("inf"),
     config: Optional[Dict[str, Any]] = None,
 ) -> None:
-    """Save model state dict, optimizer state, scheduler state, and training metadata."""
+    """Save model state dict, optimizer state, scheduler state, and training metadata.
+
+    Writes to a temporary file first, then atomically replaces the target to
+    prevent corrupted checkpoints on crash.
+    """
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -33,7 +38,9 @@ def save_checkpoint(
     if scheduler is not None:
         payload["scheduler_state_dict"] = scheduler.state_dict()
 
-    torch.save(payload, path)
+    tmp_path = path.with_suffix(path.suffix + ".tmp")
+    torch.save(payload, tmp_path)
+    os.replace(tmp_path, path)  # atomic on same filesystem
 
 
 def load_checkpoint(

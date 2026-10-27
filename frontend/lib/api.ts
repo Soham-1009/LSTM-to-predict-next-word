@@ -365,18 +365,19 @@ export async function predictNextWord(request: PredictRequest): Promise<PredictR
     if (res.ok) {
       return await res.json();
     }
-  } catch {
-    // If backend is unreachable on GitHub Pages, return offline demo candidate predictions
-    return {
-      input_text: request.text,
-      predictions: getFallbackPredictions(request.text, request.top_k ?? 5),
-    };
+    // Surface real server errors instead of silently falling back
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Prediction failed: ${res.statusText}`);
+  } catch (err) {
+    // Network error (backend unreachable) — fall back to offline demo predictions
+    if (err instanceof TypeError) {
+      return {
+        input_text: request.text,
+        predictions: getFallbackPredictions(request.text, request.top_k ?? 5),
+      };
+    }
+    throw err;
   }
-
-  return {
-    input_text: request.text,
-    predictions: getFallbackPredictions(request.text, request.top_k ?? 5),
-  };
 }
 
 export async function generateText(request: GenerateRequest): Promise<GenerateResponse> {
@@ -397,31 +398,36 @@ export async function generateText(request: GenerateRequest): Promise<GenerateRe
     if (res.ok) {
       return await res.json();
     }
-  } catch {
-    // Offline demo continuation fallback
+    // Surface real server errors instead of silently falling back
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Generation failed: ${res.statusText}`);
+  } catch (err) {
+    // Network error (backend unreachable) — fall back to offline demo continuation
+    if (err instanceof TypeError) {
+      const promptTrimmed = request.prompt.trim();
+      let continuation = "";
+      if (promptTrimmed.toLowerCase().includes("once upon a")) {
+        continuation = "time, in a quiet village surrounded by ancient woods, there lived an old storyteller whose words could captivate any traveler.";
+      } else if (promptTrimmed.toLowerCase().includes("history of the")) {
+        continuation = "modern world was shaped by political revolutions, technological advances, and international trade networks expanding across continents.";
+      } else if (promptTrimmed.toLowerCase().includes("computer science")) {
+        continuation = "function is a self-contained block of code designed to perform a specific task, taking inputs and returning output values.";
+      } else {
+        continuation = "first step demonstrated significant stability across subsequent iterations, providing strong foundation for further experimental validation.";
+      }
+
+      const fullText = promptTrimmed ? `${promptTrimmed} ${continuation}` : continuation;
+      const wordCount = continuation.split(/\s+/).filter(Boolean).length;
+
+      return {
+        prompt: request.prompt,
+        generated_text: fullText,
+        tokens_generated: wordCount,
+        finish_reason: "length",
+      };
+    }
+    throw err;
   }
-
-  const promptTrimmed = request.prompt.trim();
-  let continuation = "";
-  if (promptTrimmed.toLowerCase().includes("once upon a")) {
-    continuation = "time, in a quiet village surrounded by ancient woods, there lived an old storyteller whose words could captivate any traveler.";
-  } else if (promptTrimmed.toLowerCase().includes("history of the")) {
-    continuation = "modern world was shaped by political revolutions, technological advances, and international trade networks expanding across continents.";
-  } else if (promptTrimmed.toLowerCase().includes("computer science")) {
-    continuation = "function is a self-contained block of code designed to perform a specific task, taking inputs and returning output values.";
-  } else {
-    continuation = "first step demonstrated significant stability across subsequent iterations, providing strong foundation for further experimental validation.";
-  }
-
-  const fullText = promptTrimmed ? `${promptTrimmed} ${continuation}` : continuation;
-  const wordCount = continuation.split(/\s+/).filter(Boolean).length;
-
-  return {
-    prompt: request.prompt,
-    generated_text: fullText,
-    tokens_generated: wordCount,
-    finish_reason: "length",
-  };
 }
 
 export async function fetchGeneralizationReport(): Promise<GeneralizationReport> {

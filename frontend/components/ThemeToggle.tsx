@@ -36,7 +36,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="w-9 h-9 rounded-lg bg-neutral-900/80 border border-neutral-800" />
+      <div className="w-8 h-8 rounded border border-[var(--border)] bg-[var(--surface)]" />
     );
   }
 
@@ -44,21 +44,20 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       type="button"
-      className="flex items-center justify-center w-9 h-9 rounded-lg bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900/80 dark:hover:bg-neutral-800 border border-neutral-300 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
-      title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      className="flex items-center justify-center w-8 h-8 rounded border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--raised)] text-[var(--muted)] hover:text-[var(--text)] transition-colors duration-150 cursor-pointer"
+      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       aria-label="Toggle theme mode"
     >
       {theme === "dark" ? (
-        // Sun Icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.75"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="w-4 h-4 text-amber-400 transition-transform hover:rotate-45"
+          className="w-4 h-4 text-[var(--warning)]"
         >
           <circle cx="12" cy="12" r="4" />
           <path d="M12 2v2" />
@@ -71,16 +70,15 @@ export default function ThemeToggle() {
           <path d="m19.07 4.93-1.41 1.41" />
         </svg>
       ) : (
-        // Moon Icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.75"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="w-4 h-4 text-violet-600 transition-transform hover:-rotate-12"
+          className="w-4 h-4 text-[var(--accent)]"
         >
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
         </svg>
