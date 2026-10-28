@@ -299,9 +299,14 @@ def predict_next_word(request: PredictRequest) -> PredictResponse:
 
     if service.model is None:
         raise HTTPException(status_code=503, detail="Model is initializing.")
+    if not service.checkpoint_loaded:
+        raise HTTPException(
+            status_code=503,
+            detail="No trained checkpoint loaded. Train weights with 'python -m backend.training.train' first."
+        )
 
-    # 1. Tokenize input text to token IDs
-    token_ids = service.tokenizer.encode(trimmed)
+    # 1. Tokenize input text to token IDs with BOS prefix for conditioned state
+    token_ids = service.tokenizer.encode(trimmed, add_bos=True)
     if not token_ids:
         token_ids = [service.tokenizer.unk_id]
 
@@ -377,9 +382,14 @@ def generate_text(request: GenerateRequest) -> GenerateResponse:
 
     if service.model is None:
         raise HTTPException(status_code=503, detail="Model is initializing.")
+    if not service.checkpoint_loaded:
+        raise HTTPException(
+            status_code=503,
+            detail="No trained checkpoint loaded. Train weights with 'python -m backend.training.train' first."
+        )
 
-    # 1. Tokenize seed prompt
-    token_ids = service.tokenizer.encode(trimmed)
+    # 1. Tokenize seed prompt with BOS prefix for conditioned state
+    token_ids = service.tokenizer.encode(trimmed, add_bos=True)
     if not token_ids:
         token_ids = [service.tokenizer.bos_id]
 
@@ -406,6 +416,15 @@ def generate_text(request: GenerateRequest) -> GenerateResponse:
                 ]:
                     if cid < step_logits.size(0):
                         step_logits[cid] = -float("Inf")
+
+                # Apply repetition penalty to recently generated tokens to prevent degenerate loops
+                if len(generated_ids) > len(token_ids):
+                    for tid in set(generated_ids[-35:]):
+                        if tid < step_logits.size(0):
+                            if step_logits[tid] > 0:
+                                step_logits[tid] /= 1.25
+                            else:
+                                step_logits[tid] *= 1.25
 
                 # Sample next token
                 next_id = sample_next_token(

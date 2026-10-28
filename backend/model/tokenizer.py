@@ -18,8 +18,8 @@ from typing import Dict, List, Optional, Sequence
 SPECIAL_TOKENS = ["<PAD>", "<UNK>", "<BOS>", "<EOS>"]
 PAD_TOKEN, UNK_TOKEN, BOS_TOKEN, EOS_TOKEN = SPECIAL_TOKENS
 
-# Regex tokenizer pattern to capture words, contractions, and punctuation marks separately
-TOKEN_REGEX = re.compile(r"\w+(?:'\w+)?|[^\w\s]")
+# Regex tokenizer pattern to capture words and punctuation marks separately
+TOKEN_REGEX = re.compile(r"\w+|[^\w\s]")
 
 
 class Tokenizer:
@@ -59,7 +59,10 @@ class Tokenizer:
         if add_bos:
             ids.append(self.bos_id)
         for tok in tokens:
-            ids.append(self.token_to_id.get(tok, self.unk_id))
+            tok_id = self.token_to_id.get(tok)
+            if tok_id is None:
+                tok_id = self.token_to_id.get(tok.lower(), self.unk_id)
+            ids.append(tok_id)
         if add_eos:
             ids.append(self.eos_id)
         return ids
